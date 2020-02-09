@@ -47,5 +47,6 @@ $(function() {
         }
         $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
         $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_title')[0].innerText;
+        $('#audio')[0].play();
     }, false);
 });
