@@ -35,6 +35,7 @@ def add(request):
 
 def search(request):
     if request.GET.get('text', False):
+        print('Here')
         text = request.GET['text']
         tracks = client.search(text, type_='track').tracks
         if tracks:
@@ -51,12 +52,15 @@ def search(request):
     return render(request, 'playlist/_search.html')
 
 
+def clear(request):
+    return render(request, 'playlist/_search.html')
+
+
 def delete(request):
     if request.method == "POST":
         if request.is_ajax():
-            for track in Track.objects.all():
-                if "track%s" % track.id in request.POST:
-                    track.delete()
+            track = Track.objects.get(id=request.POST['id'])
+            track.delete()
             context = {'track_list': Track.objects.all().order_by('add_at')}
             return render(request, 'playlist/_list.html', context)
     return render(request, 'playlist/_list.html')
@@ -68,3 +72,4 @@ def update(request):
             context = {'track_list': Track.objects.all().order_by('add_at')}
             return render(request, 'playlist/_list.html', context)
     return render(request, 'playlist/_list.html')
+

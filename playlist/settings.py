@@ -25,7 +25,7 @@ SECRET_KEY = 'dtt4j4__3=filnjklxjc-y^@fhwmsfl8*s+ic^8h3=53k!u4ev'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.114', 'localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -105,8 +105,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-YANDEX_MUSIC_USER = 'example@yandex.ru'
-YANDEX_MUSIC_PASSWORD = 'example'
+YANDEX_MUSIC_USER = 'userl@yandex.ru'
+YANDEX_MUSIC_PASSWORD = 'password'
 
 
 # Internationalization

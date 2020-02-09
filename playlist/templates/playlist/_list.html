@@ -1,11 +1,59 @@
 {% if track_list %}
-    {% for track in track_list %}
-    <div class="row" id="track{{ forloop.counter }}">
-        <div class="col-1" align="center"><input type="checkbox" name="track{{ track.id }}" value="{{ track.id }}"></div>
-        <div class="col-1" id="track_title">{{ track.artists|join:", " }} - {{ track.title }}</div>
-        {% if track.file %}<div class="col-1" hidden><a id="track_url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
-    </div>
-    {% endfor %}
-{% else %}
-No saved tracks.
+<script type="text/javascript">
+    $(function() {
+        $("button[name='delete']").each(function(){
+            $(this).click(function(){
+                event.preventDefault();
+                index = Array.from($("button[name='delete']")).indexOf(this) + 1;
+                count = $('#_list').find('div#track_title').length;
+                if (index == currentTrack) {
+                    if (count == 1) {
+                        currentTrack = 0;
+                    } else if (index == count) {
+                        currentTrack = 1;
+                    }
+                } else if (index < currentTrack) {
+                    --currentTrack;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/delete/',
+                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.value},
+                    success: function (data, textStatus) {
+                        $('#_list').html(data);
+                        paused = $('#audio')[0].paused;
+                        if (currentTrack == 0) {
+                            $('#audio')[0].src = "";
+                            $('#title')[0].innerText = "";
+                        } else {
+                            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
+                                                           " - " +
+                                                           $('#track'+currentTrack).find('div#track_title')[0].innerText;
+                            if ($('#audio')[0].src !== $('#track'+currentTrack).find('a#track_url')[0].href)
+                            {
+                                $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
+                                if (!paused) $('#audio')[0].play();
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+<div class="row">
+    <div class="col">#</div>
+    <div class="col">Title</div>
+    <div class="col">Artist</div>
+    <div class="col-1"></div>
+</div>
+{% for track in track_list %}
+<div id="track{{ forloop.counter }}" class="row">
+    <div id="track_index" class="col">{{ forloop.counter }}</div>
+    <div id="track_title" class="col">{{ track.title }}</div>
+    <div id="track_artist" class="col">{{ track.artists|join:", " }}</div>
+    {% if track.file %}<div class="col-1" hidden><a id="track_url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
+    <button name="delete" value="{{ track.id }}" class="btn btn-primary col-1">Delete</button>
+</div>
+{% endfor %}
 {% endif %}

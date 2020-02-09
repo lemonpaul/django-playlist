@@ -4,7 +4,7 @@ $(function() {
     {
         currentTrack = 1;
         $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
-        $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_title')[0].innerText;
+        $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText + " - " + $('#track'+currentTrack).find('div#track_title')[0].innerText;
     }
     $('#next_track').click(function (e) {
         e.preventDefault();
@@ -18,7 +18,7 @@ $(function() {
                 currentTrack++;
             }
             $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
-            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_title')[0].innerText;
+            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText + " - " + $('#track'+currentTrack).find('div#track_title')[0].innerText;
             if (!paused) $('#audio')[0].play();
         }
     });
@@ -34,7 +34,7 @@ $(function() {
                 currentTrack--;
             }
             $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
-            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_title')[0].innerText;
+            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText + " - " + $('#track'+currentTrack).find('div#track_title')[0].innerText;
             if (!paused) $('#audio')[0].play();
         }
     });
@@ -46,7 +46,7 @@ $(function() {
             currentTrack++;
         }
         $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
-        $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_title')[0].innerText;
+        $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText + " - " + $('#track'+currentTrack).find('div#track_title')[0].innerText;
         $('#audio')[0].play();
     }, false);
 });

@@ -1,38 +1,60 @@
-{% load static %}
-{% if results %}
 <script type="text/javascript">
-$(function() {
-    $("button[name='id']").each(function(){
-        $(this).click(function(){
-            event.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '/add/',
-                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.value},
-                success: function (data, textStatus) {
-                    $('#_list').html(data);
-                    $('#search_form').hide();
-                    $('#_search').hide();
-                    $('#add').show();
-                    if (currentTrack == 0) {
-                        currentTrack = 1;
-                        $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
-                        $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_title')[0].innerText;
-                     }
-                }
+    $(function() {
+        $('#search')[0].addEventListener("keypress", function (e) {
+            if (e.key == "Enter")
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: '/search/',
+                    data: {'text': this.value},
+                    success: function (data, textStatus) {
+                        $('#_search').html(data);
+                        this.value = "";
+                    }
+                });
+            }
+        }, false);
+
+        $("button[name='id']").each(function(){
+            $(this).click(function(){
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/add/',
+                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.value},
+                    success: function (data, textStatus) {
+                        $('#_list').html(data);
+                        $.ajax({
+                            type: 'GET',
+                            url: '/clear/',
+                            success: function (data, textStatus) {
+                                $('#_search').html(data);
+                                this.value = "";
+                            }
+                        });
+                        if (currentTrack == 0) {
+                            currentTrack = 1;
+                            $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
+                            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
+                                                           " - " +
+                                                           $('#track'+currentTrack).find('div#track_title')[0].innerText;
+                         }
+                    }
+                });
             });
         });
     });
-});
 </script>
+<div class="row">
+    <input id="search" type="text" name="text" class="col">
+</div>
+{% if results %}
 {% for track in results %}
 <div class="row">
-    <div class="col-1 m-1">{{ track.artists|join:", " }}</div>
-    <div class="col-1 m-1">{{ track.title }}</div>
-    <div class="col-1 m-1">{{ track.album }}</div>
-    <button name="id" value="{{ track.id }}" class="btn btn-primary col-1 m-1">Add</button>
+    <div class="col">{{ track.artists|join:", " }}</div>
+    <div class="col">{{ track.title }}</div>
+    <div class="col">{{ track.album }}</div>
+    <button name="id" value="{{ track.id }}" class="btn btn-primary col-1">Add</button>
 </div>
 {% endfor %}
-{% else %}
-No found tracks.
 {% endif %}

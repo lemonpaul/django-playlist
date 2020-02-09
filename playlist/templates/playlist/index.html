@@ -1,36 +1,27 @@
-{% extends "playlist/base.html" %}
-{% load static %}
-{% block title %}Yandex Music Playlist{% endblock %}
-{% block content %}
-<div class="p-4">
-    <form id="delete_form" method="post">
-        {% csrf_token %}
-        <div class="row">
-            <button type="submit" class="btn btn-primary col-1 m-1" id="delete_button">Delete</button>
+{% load static %}<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'playlist/bootstrap.min.css' %}">
+        <script src="{% static 'playlist/jquery-3.4.1.min.js' %}"></script>
+        <script src="{% static 'playlist/ajax.js' %}"></script>
+        <script src="{% static 'playlist/player.js' %}"></script>
+        <title>Yandex Music Playlist</title>
+    </head>
+    <body>
+        <div id="_list" class="container p-4">{% include "playlist/_list.html" %}
         </div>
-        <div id="_list">
-            {% include "playlist/_list.html" %}
+        <div id="player" class="container p-4">
+            <div class="row">
+                <div id="title" class="col"></div>
+            </div>
+            <div class="row">
+                <audio id="audio" controls class="col"></audio>
+                <button id="prev_track" class="btn btn-primary col-1">Previous</button>
+                <button id="next_track" class="btn btn-primary col-1">Next</button>
+            </div>
         </div>
-    </form>
-    <div id="player">
-        <div id="title"></div>
-        <div class="row">
-            <audio id="audio" controls class="col-3 m-1"></audio>
-            <button id="prev_track" class="btn btn-primary col-1 m-1">Previous</button>
-            <button id="next_track" class="btn btn-primary col-1 m-1">Next</button>
+        <div id="_search" class="container p-4">
+            {% include "playlist/_search.html" %}
         </div>
-    </div>
-    <div class="row">
-        <button class="btn btn-primary col-1 m-1" id="add">Add</button>
-    </div>
-    <form method="get" id="search_form">
-        <div class="row">
-            <input type="text" name="text" class="col-1 m-1">
-            <button type="submit" class="btn btn-primary btn-block col-1 m-1">Search</button>
-        </div>
-    </form>
-    <div id="_search">
-        {% include "playlist/_search.html" %}
-    </div>
-</div>
-{% endblock %}
+    </body>
+</html>
