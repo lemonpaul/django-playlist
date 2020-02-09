@@ -1,0 +1,11 @@
+{% if track_list %}
+    {% for track in track_list %}
+    <div class="row" id="track{{ forloop.counter }}">
+        <div class="col-1" align="center"><input type="checkbox" name="track{{ track.id }}" value="{{ track.id }}"></div>
+        <div class="col-1" id="track_title">{{ track.artists|join:", " }} - {{ track.title }}</div>
+        {% if track.file %}<div class="col-1" hidden><a id="track_url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
+    </div>
+    {% endfor %}
+{% else %}
+No saved tracks.
+{% endif %}

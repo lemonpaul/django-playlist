@@ -1,0 +1,13 @@
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'playlist/bootstrap.min.css' %}">
+    <script src="{% static 'playlist/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'playlist/ajax.js' %}"></script>
+    <script src="{% static 'playlist/player.js' %}"></script>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    {% block content %}{% endblock %}
+</body>
+</html>
