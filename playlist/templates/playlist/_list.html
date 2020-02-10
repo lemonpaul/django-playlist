@@ -74,7 +74,6 @@
             $("div#pause")[0].addEventListener("mouseleave", _update, false);
         };
         _update = function (e) {
-            console.log('_update OK');
             index = this.children[0].name;
             if (currentTrack == index) {
                 $(this).replaceWith("<div id='track_index' class='col-1 m-1'>*</div>");
@@ -85,7 +84,6 @@
             }
         };
         _enter = function() {
-            console.log('_enter OK');
             index = (this.innerText == "*") ? currentTrack : parseInt(this.innerText);
             event.preventDefault();
             if (currentTrack !== index)
