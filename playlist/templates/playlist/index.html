@@ -7,11 +7,14 @@
         <script src="{% static 'playlist/player.js' %}"></script>
         <title>Yandex Music Playlist</title>
     </head>
-    <body>
+    <body style="padding-bottom: 5rem">
         <div id="_list" class="container p-1">
             {% include "playlist/_list.html" %}
         </div>
-        <div id="player" class="container p-1">
+        <div id="_search" class="container p-1">
+            {% include "playlist/_search.html" %}
+        </div>
+        <div id="player" class="container-fluid p-1 fixed-bottom">
             <div class="row">
                 <div id="title" class="col m-1"></div>
                 <div class="col-1 m-1"></div>
@@ -22,9 +25,6 @@
                 <button id="prev_track" class="btn btn-success col-1 m-1">Previous</button>
                 <button id="next_track" class="btn btn-success col-1 m-1">Next</button>
             </div>
-        </div>
-        <div id="_search" class="container p-1">
-            {% include "playlist/_search.html" %}
         </div>
     </body>
 </html>

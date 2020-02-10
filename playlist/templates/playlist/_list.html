@@ -1,6 +1,7 @@
 {% if track_list %}
 <script type="text/javascript">
     $(function() {
+        if (currentTrack !== 0) $('div#track_index')[currentTrack-1].innerText = "*";
         $("button[name='delete']").each(function(){
             $(this).click(function(){
                 event.preventDefault();
@@ -40,6 +41,11 @@
             });
         });
         _play = function (e) {
+            if (index < currentTrack) {
+                $('div#track_index')[currentTrack-2].innerText = currentTrack;
+            } else {
+                $('div#track_index')[currentTrack-1].innerText = currentTrack;
+            }
             currentTrack = index;
             $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
             $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
@@ -52,8 +58,13 @@
         };
         _update = function (e) {
             index = this.value;
-            $(this).replaceWith("<div name='track_index' class='col-1 m-1'>"+index+"</div>");
-            $("div[name='track_index']").filter(function() { return this.innerText == index; })[0].addEventListener("mouseenter", _enter, false);
+            if (currentTrack == index) {
+                $(this).replaceWith("<div id='track_index' class='col-1 m-1'>*</div>");
+                $("div#track_index").filter(function() { return this.innerText == "*"; })[0].addEventListener("mouseenter", _enter, false);
+            } else {
+                $(this).replaceWith("<div id='track_index' class='col-1 m-1'>"+index+"</div>");
+                $("div#track_index").filter(function() { return this.innerText == index; })[0].addEventListener("mouseenter", _enter, false);
+            }
         };
         _play_after_pause = function (e) {
             $('#audio')[0].play();
@@ -70,7 +81,7 @@
             $("button[name='play']")[0].addEventListener("mouseleave", _update, false);
         };
         _enter = function(){
-            index = parseInt(this.innerText);
+            index = (this.innerText == "*") ? currentTrack : parseInt(this.innerText);
             event.preventDefault();
             if (currentTrack !== index)
             {
@@ -87,7 +98,7 @@
                 $("button[name='pause']")[0].addEventListener("mouseleave", _update, false);
             }
         };
-        $("div[name='track_index']").each(function(){
+        $("div#track_index").each(function(){
             $(this).mouseenter(_enter);
         });
     });
@@ -100,7 +111,7 @@
 </div>
 {% for track in track_list %}
 <div id="track{{ forloop.counter }}" class="row">
-    <div name="track_index" class="col-1 m-1">{{ forloop.counter }}</div>
+    <div id="track_index" class="col-1 m-1">{{ forloop.counter }}</div>
     <div id="track_title" class="col m-1">{{ track.title }}</div>
     <div id="track_artist" class="col m-1">{{ track.artists|join:", " }}</div>
     {% if track.file %}<div class="col-1" hidden><a id="track_url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
