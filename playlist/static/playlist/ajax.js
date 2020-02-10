@@ -1,6 +1,6 @@
 $(function() {
     setInterval(function() {
-        if ($("button[name='play']").length == 0 && $("button[name='pause']").length)
+        if ($("button[name='play']").length == 0 && $("button[name='pause']").length == 0)
         {
             $.ajax({
                 type: 'GET',
