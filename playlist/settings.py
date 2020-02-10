@@ -105,8 +105,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-YANDEX_MUSIC_USER = 'leamonpaul@yandex.ru'
-YANDEX_MUSIC_PASSWORD = 'o8AMGtiK'
+YANDEX_MUSIC_USER = 'user@yandex.ru'
+YANDEX_MUSIC_PASSWORD = 'password'
 
 
 # Internationalization
