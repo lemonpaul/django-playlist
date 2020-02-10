@@ -7,7 +7,7 @@
         <script src="{% static 'playlist/player.js' %}"></script>
         <title>Yandex Music Playlist</title>
     </head>
-    <body style="padding-bottom: 5rem; background-color: #121212; color: #fff;">
+    <body style="padding-bottom: 5rem; background-color: #121212; color: #fff; font-size: 28px;">
         <div id="_search" class="container p-1">
             {% include "playlist/_search.html" %}
         </div>
@@ -15,18 +15,21 @@
             {% include "playlist/_list.html" %}
         </div>
         <div id="player" class="container p-1 fixed-bottom">
-            <div class="row">
+            <div class="row align-items-center">
                 <div id="title" class="col m-1"></div>
-                <div class="col-2 m-1"></div>
+                <div class="col-4 m-1"></div>
             </div>
-            <div class="row">
-                <audio id="audio" controls class="col m-1"></audio>
-                <div id="control" class="col-2 m-1">
-                    <img class="prev" src="{% static 'playlist/icons/prev.ico' %}" width="40" style="cursor:pointer">
-                    <img class="next" src="{% static 'playlist/icons/next.ico' %}" width="40" style="cursor:pointer">
+            <div class="row align-items-center justify-content-between">
+                <div class="col m-1">
+                    <audio id="audio" controls class="w-100"></audio>
+                </div>
+                <div class="col-1 m-1">
+                    <img class="prev" src="{% static 'playlist/icons/prev.ico' %}" width="80" style="cursor:pointer">
+                </div>
+                <div class="col-1 m-1">
+                    <img class="next" src="{% static 'playlist/icons/next.ico' %}" width="80" style="cursor:pointer">
                 </div>
             </div>
         </div>
-
     </body>
 </html>

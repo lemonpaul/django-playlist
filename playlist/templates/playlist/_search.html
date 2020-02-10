@@ -46,11 +46,11 @@
         });
     });
 </script>
-<div class="row">
+<div class="row align-items-center">
     <input id="search" type="text" name="text" placeholder="Search" class="col m-1" style="background-color: transparent; color: #fff;">
 </div>
 {% if results %}
-<div class="row">
+<div class="row align-items-center">
     <div class="col m-1">Title</div>
     <div class="col m-1">Artist</div>
     <div class="col m-1">Album</div>
@@ -58,11 +58,11 @@
     <div class="col-1 m-1"></div>
 </div>
 {% for track in results %}
-<div class="row">
+<div class="row align-items-center">
     <div class="col m-1">{{ track.title }}</div>
     <div class="col m-1">{{ track.artists|join:", " }}</div>
     <div class="col m-1">{{ track.album }}</div>
-    <div class="col-1 m-1"><img name="{{ track.id }}" class="add" src="{% static 'playlist/icons/add.ico' %}" width="20" style="cursor:pointer"></div>
+    <div class="col-1 m-1"><img name="{{ track.id }}" class="add" src="{% static 'playlist/icons/add.ico' %}" width="80" style="cursor:pointer"></div>
     <div class="col-1 m-1">{{ track.duration }}</div>
 </div>
 {% endfor %}
