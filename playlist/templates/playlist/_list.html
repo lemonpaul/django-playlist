@@ -108,6 +108,7 @@
     <div class="col m-1">Title</div>
     <div class="col m-1">Artist</div>
     <div class="col-1 m-1"></div>
+    <div class="col-1 m-1"></div>
 </div>
 {% for track in track_list %}
 <div id="track{{ forloop.counter }}" class="row">
@@ -116,6 +117,7 @@
     <div id="track_artist" class="col m-1">{{ track.artists|join:", " }}</div>
     {% if track.file %}<div class="col-1" hidden><a id="track_url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
     <button name="delete" value="{{ track.id }}" class="btn btn-danger col-1 m-1">Delete</button>
+    <div id="track_duration" class="col-1 m-1">{{ track.duration_string }}</div>
 </div>
 {% endfor %}
 {% endif %}

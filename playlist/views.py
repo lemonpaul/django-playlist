@@ -1,4 +1,5 @@
 import os
+import datetime
 
 from django.core.files import File
 from django.shortcuts import render
@@ -21,7 +22,8 @@ def add(request):
         track = client.tracks(id_value)[0]
         title = track.title
         artists = list(map(lambda t: t.name, track.artists))
-        new_track = Track.objects.create(title=title, artists=artists)
+        duration = datetime.timedelta(milliseconds=track.duration_ms)
+        new_track = Track.objects.create(title=title, artists=artists, duration=duration)
         new_track.save()
         track.download(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media/tracks/track.mp3'))
         new_track.file.save('track.mp3', File(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),

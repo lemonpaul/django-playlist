@@ -7,14 +7,14 @@
         <script src="{% static 'playlist/player.js' %}"></script>
         <title>Yandex Music Playlist</title>
     </head>
-    <body style="padding-bottom: 5rem">
+    <body style="padding-bottom: 5rem;">
         <div id="_list" class="container p-1">
             {% include "playlist/_list.html" %}
         </div>
         <div id="_search" class="container p-1">
             {% include "playlist/_search.html" %}
         </div>
-        <div id="player" class="container-fluid p-1 fixed-bottom">
+        <div id="player" class="container p-1 fixed-bottom">
             <div class="row">
                 <div id="title" class="col m-1"></div>
                 <div class="col-1 m-1"></div>
