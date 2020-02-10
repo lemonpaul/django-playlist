@@ -1,5 +1,7 @@
 {% load static %}
 {% if track_list %}
+<!--<img name='"+index+"' class='play' src='/static/playlist/icons/play.ico' width='20' style='cursor:pointer'>-->
+<!--<img name='"+index+"' class='pause' src='/static/playlist/icons/pause.ico' width='20' style='cursor:pointer'>-->
 <script type="text/javascript">
     $(function() {
         if (currentTrack !== 0) $('div#track_index')[currentTrack-1].innerText = "*";
@@ -53,12 +55,27 @@
                                        " - " +
                                        $('#track'+currentTrack).find('div#track_title')[0].innerText;
             $('#audio')[0].play();
-            $(this).replaceWith("<button name='pause' value='"+index+"' class='btn btn-success col-1 m-1'>Pause</button>");
-            $("button[name='pause']")[0].addEventListener("click", _pause, false);
-            $("button[name='pause']")[0].addEventListener("mouseleave", _update, false);
+            $(this).parent().replaceWith("<div id='pause' class='col-1 m-1'><img name='"+index+"' class='pause' src='/static/playlist/icons/pause.ico' width='20' style='cursor:pointer'></div>");
+            $("img.pause")[0].addEventListener("click", _pause, false);
+            $("div#pause")[0].addEventListener("mouseleave", _update, false);
+        };
+        _pause = function (e) {
+            $('#audio')[0].pause();
+            index = this.name;
+            $(this).parent().replaceWith("<div id='play' class='col-1 m-1'><img name='"+index+"' class='play' src='/static/playlist/icons/play.ico' width='20' style='cursor:pointer'></div>");
+            $("img.play")[0].addEventListener("click", _play_after_pause, false);
+            $("div#play")[0].addEventListener("mouseleave", _update, false);
+        };
+        _play_after_pause = function (e) {
+            $('#audio')[0].play();
+            index = this.name;
+            $(this).parent().replaceWith("<div id='pause' class='col-1 m-1'><img name='"+index+"' class='pause' src='/static/playlist/icons/pause.ico' width='20' style='cursor:pointer'></div>");
+            $("img.pause")[0].addEventListener("click", _pause, false);
+            $("div#pause")[0].addEventListener("mouseleave", _update, false);
         };
         _update = function (e) {
-            index = this.value;
+            console.log('_update OK');
+            index = this.children[0].name;
             if (currentTrack == index) {
                 $(this).replaceWith("<div id='track_index' class='col-1 m-1'>*</div>");
                 $("div#track_index").filter(function() { return this.innerText == "*"; })[0].addEventListener("mouseenter", _enter, false);
@@ -67,36 +84,23 @@
                 $("div#track_index").filter(function() { return this.innerText == index; })[0].addEventListener("mouseenter", _enter, false);
             }
         };
-        _play_after_pause = function (e) {
-            $('#audio')[0].play();
-            index = this.value;
-            $(this).replaceWith("<button name='pause' value='"+index+"' class='btn btn-success col-1 m-1'>Pause</button>");
-            $("button[name='pause']")[0].addEventListener("click", _pause, false);
-            $("button[name='pause']")[0].addEventListener("mouseleave", _update, false);
-        };
-        _pause = function (e) {
-            $('#audio')[0].pause();
-            index = this.value;
-            $(this).replaceWith("<button name='play' value='"+index+"' class='btn btn-success col-1 m-1'>Play</button>");
-            $("button[name='play']")[0].addEventListener("click", _play_after_pause, false);
-            $("button[name='play']")[0].addEventListener("mouseleave", _update, false);
-        };
-        _enter = function(){
+        _enter = function() {
+            console.log('_enter OK');
             index = (this.innerText == "*") ? currentTrack : parseInt(this.innerText);
             event.preventDefault();
             if (currentTrack !== index)
             {
-                $(this).replaceWith("<button name='play' value='"+index+"' class='btn btn-success col-1 m-1'>Play</button>");
-                $("button[name='play']")[0].addEventListener("click", _play, false);
-                $("button[name='play']")[0].addEventListener("mouseleave", _update, false);
+                $(this).replaceWith("<div id='play' class='col-1 m-1'><img name='"+index+"' class='play' src='/static/playlist/icons/play.ico' width='20' style='cursor:pointer'></div>");
+                $("img.play")[0].addEventListener("click", _play, false);
+                $("#play")[0].addEventListener("mouseleave", _update, false);
             } else if ($('#audio')[0].paused) {
-                $(this).replaceWith("<button name='play' value='"+index+"' class='btn btn-success col-1 m-1'>Play</button>");
-                $("button[name='play']")[0].addEventListener("click", _play_after_pause, false);
-                $("button[name='play']")[0].addEventListener("mouseleave", _update, false);
+                $(this).replaceWith("<div id='play' class='col-1 m-1'><img name='"+index+"' class='play' src='/static/playlist/icons/play.ico' width='20' style='cursor:pointer'></div>");
+                $("img.play")[0].addEventListener("click", _play_after_pause, false);
+                $("#play")[0].addEventListener("mouseleave", _update, false);
             } else {
-                $(this).replaceWith("<button name='pause' value='"+index+"' class='btn btn-success col-1 m-1'>Pause</button>");
-                $("button[name='pause']")[0].addEventListener("click", _pause, false);
-                $("button[name='pause']")[0].addEventListener("mouseleave", _update, false);
+                $(this).replaceWith("<div id='pause' class='col-1 m-1'><img name='"+index+"' class='pause' src='/static/playlist/icons/pause.ico' width='20' style='cursor:pointer'></div>");
+                $("img.pause")[0].addEventListener("click", _pause, false);
+                $("#pause")[0].addEventListener("mouseleave", _update, false);
             }
         };
         $("div#track_index").each(function(){
