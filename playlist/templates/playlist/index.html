@@ -8,19 +8,22 @@
         <title>Yandex Music Playlist</title>
     </head>
     <body>
-        <div id="_list" class="container p-4">{% include "playlist/_list.html" %}
+        <div id="_list" class="container p-1">
+            {% include "playlist/_list.html" %}
         </div>
-        <div id="player" class="container p-4">
+        <div id="player" class="container p-1">
             <div class="row">
-                <div id="title" class="col"></div>
+                <div id="title" class="col m-1"></div>
+                <div class="col-1 m-1"></div>
+                <div class="col-1 m-1"></div>
             </div>
             <div class="row">
-                <audio id="audio" controls class="col"></audio>
-                <button id="prev_track" class="btn btn-primary col-1">Previous</button>
-                <button id="next_track" class="btn btn-primary col-1">Next</button>
+                <audio id="audio" controls class="col m-1"></audio>
+                <button id="prev_track" class="btn btn-success col-1 m-1">Previous</button>
+                <button id="next_track" class="btn btn-success col-1 m-1">Next</button>
             </div>
         </div>
-        <div id="_search" class="container p-4">
+        <div id="_search" class="container p-1">
             {% include "playlist/_search.html" %}
         </div>
     </body>

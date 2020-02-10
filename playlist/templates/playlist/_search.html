@@ -46,15 +46,21 @@
     });
 </script>
 <div class="row">
-    <input id="search" type="text" name="text" class="col">
+    <input id="search" type="text" name="text" class="col m-1">
 </div>
 {% if results %}
+<div class="row">
+    <div class="col m-1">Title</div>
+    <div class="col m-1">Artist</div>
+    <div class="col m-1">Album</div>
+    <div class="col-1 m-1"></div>
+</div>
 {% for track in results %}
 <div class="row">
-    <div class="col">{{ track.artists|join:", " }}</div>
-    <div class="col">{{ track.title }}</div>
-    <div class="col">{{ track.album }}</div>
-    <button name="id" value="{{ track.id }}" class="btn btn-primary col-1">Add</button>
+    <div class="col m-1">{{ track.title }}</div>
+    <div class="col m-1">{{ track.artists|join:", " }}</div>
+    <div class="col m-1">{{ track.album }}</div>
+    <button name="id" value="{{ track.id }}" class="btn btn-primary col-1 m-1">Add</button>
 </div>
 {% endfor %}
 {% endif %}

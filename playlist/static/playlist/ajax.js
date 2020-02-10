@@ -1,6 +1,6 @@
 $(function() {
     setInterval(function() {
-        if ($(':checkbox:checked').length == 0)
+        if ($("button[name='play']").length == 0 && $("button[name='pause']").length)
         {
             $.ajax({
                 type: 'GET',
