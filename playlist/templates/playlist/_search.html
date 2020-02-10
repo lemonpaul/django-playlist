@@ -1,3 +1,4 @@
+{% load static %}
 <script type="text/javascript">
     $(function() {
         $('#search')[0].addEventListener("keypress", function (e) {
@@ -15,13 +16,13 @@
             }
         }, false);
 
-        $("button[name='id']").each(function(){
+        $("img.add").each(function(){
             $(this).click(function(){
                 event.preventDefault();
                 $.ajax({
                     type: 'POST',
                     url: '/add/',
-                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.value},
+                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name},
                     success: function (data, textStatus) {
                         $('#_list').html(data);
                         $.ajax({
@@ -61,7 +62,7 @@
     <div class="col m-1">{{ track.title }}</div>
     <div class="col m-1">{{ track.artists|join:", " }}</div>
     <div class="col m-1">{{ track.album }}</div>
-    <button name="id" value="{{ track.id }}" class="btn btn-primary col-1 m-1">Add</button>
+    <div class="col-1 m-1"><img name="{{ track.id }}" class="add" src="{% static 'playlist/icons/add.ico' %}" width="20" style="cursor:pointer"></div>
     <div class="col-1 m-1">{{ track.duration }}</div>
 </div>
 {% endfor %}

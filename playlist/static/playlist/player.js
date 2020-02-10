@@ -6,7 +6,7 @@ $(function() {
         $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
         $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText + " - " + $('#track'+currentTrack).find('div#track_title')[0].innerText;
     }
-    $('#next_track').click(function (e) {
+    $('img.next').click(function (e) {
         e.preventDefault();
         paused = $('#audio')[0].paused;
         if (currentTrack !== 0)
@@ -24,7 +24,7 @@ $(function() {
             if (!paused) $('#audio')[0].play();
         }
     });
-    $('#prev_track').click(function (e) {
+    $('img.prev').click(function (e) {
         e.preventDefault();
         paused = $('#audio')[0].paused;
         if (currentTrack !== 0)

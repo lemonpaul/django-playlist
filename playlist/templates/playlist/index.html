@@ -17,13 +17,14 @@
         <div id="player" class="container p-1 fixed-bottom">
             <div class="row">
                 <div id="title" class="col m-1"></div>
-                <div class="col-1 m-1"></div>
-                <div class="col-1 m-1"></div>
+                <div class="col-2 m-1"></div>
             </div>
             <div class="row">
                 <audio id="audio" controls class="col m-1"></audio>
-                <button id="prev_track" class="btn btn-success col-1 m-1">Previous</button>
-                <button id="next_track" class="btn btn-success col-1 m-1">Next</button>
+                <div id="control" class="col-2 m-1">
+                    <img class="prev" src="{% static 'playlist/icons/prev.ico' %}" width="40" style="cursor:pointer">
+                    <img class="next" src="{% static 'playlist/icons/next.ico' %}" width="40" style="cursor:pointer">
+                </div>
             </div>
         </div>
 

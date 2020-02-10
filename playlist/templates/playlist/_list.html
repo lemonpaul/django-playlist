@@ -1,11 +1,12 @@
+{% load static %}
 {% if track_list %}
 <script type="text/javascript">
     $(function() {
         if (currentTrack !== 0) $('div#track_index')[currentTrack-1].innerText = "*";
-        $("button[name='delete']").each(function(){
+        $("img.delete").each(function(){
             $(this).click(function(){
                 event.preventDefault();
-                index = Array.from($("button[name='delete']")).indexOf(this) + 1;
+                index = Array.from($("img.delete")).indexOf(this) + 1;
                 count = $('#_list').find('div#track_title').length;
                 if (index == currentTrack) {
                     if (count == 1) {
@@ -19,7 +20,7 @@
                 $.ajax({
                     type: 'POST',
                     url: '/delete/',
-                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.value},
+                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name},
                     success: function (data, textStatus) {
                         $('#_list').html(data);
                         paused = $('#audio')[0].paused;
@@ -116,7 +117,7 @@
     <div id="track_title" class="col m-1">{{ track.title }}</div>
     <div id="track_artist" class="col m-1">{{ track.artists|join:", " }}</div>
     {% if track.file %}<div class="col-1" hidden><a id="track_url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
-    <button name="delete" value="{{ track.id }}" class="btn btn-danger col-1 m-1">Delete</button>
+    <div id="track_delete" class="col-1 m-1"><img name="{{ track.id }}" class="delete" src="{% static 'playlist/icons/delete.ico' %}" width="20" style="cursor:pointer"></div>
     <div id="track_duration" class="col-1 m-1">{{ track.duration_string }}</div>
 </div>
 {% endfor %}
