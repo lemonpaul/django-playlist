@@ -8,11 +8,11 @@
         <title>Yandex Music Playlist</title>
     </head>
     <body style="padding-bottom: 5rem; background-color: #121212; color: #fff;">
-        <div id="_list" class="container p-1">
-            {% include "playlist/_list.html" %}
-        </div>
         <div id="_search" class="container p-1">
             {% include "playlist/_search.html" %}
+        </div>
+        <div id="_list" class="container p-1">
+            {% include "playlist/_list.html" %}
         </div>
         <div id="player" class="container p-1 fixed-bottom">
             <div class="row">
@@ -26,5 +26,6 @@
                 <button id="next_track" class="btn btn-success col-1 m-1">Next</button>
             </div>
         </div>
+
     </body>
 </html>
