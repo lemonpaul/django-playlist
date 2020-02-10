@@ -39,64 +39,56 @@
                 });
             });
         });
+        _play = function (e) {
+            currentTrack = index;
+            $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
+            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
+                                       " - " +
+                                       $('#track'+currentTrack).find('div#track_title')[0].innerText;
+            $('#audio')[0].play();
+            $(this).replaceWith("<button name='pause' value='"+index+"' class='btn btn-success col-1 m-1'>Pause</button>");
+            $("button[name='pause']")[0].addEventListener("click", _pause, false);
+            $("button[name='pause']")[0].addEventListener("mouseleave", _update, false);
+        };
+        _update = function (e) {
+            index = this.value;
+            $(this).replaceWith("<div name='track_index' class='col-1 m-1'>"+index+"</div>");
+            $("div[name='track_index']").filter(function() { return this.innerText == index; })[0].addEventListener("mouseenter", _enter, false);
+        };
+        _play_after_pause = function (e) {
+            $('#audio')[0].play();
+            index = this.value;
+            $(this).replaceWith("<button name='pause' value='"+index+"' class='btn btn-success col-1 m-1'>Pause</button>");
+            $("button[name='pause']")[0].addEventListener("click", _pause, false);
+            $("button[name='pause']")[0].addEventListener("mouseleave", _update, false);
+        };
+        _pause = function (e) {
+            $('#audio')[0].pause();
+            index = this.value;
+            $(this).replaceWith("<button name='play' value='"+index+"' class='btn btn-success col-1 m-1'>Play</button>");
+            $("button[name='play']")[0].addEventListener("click", _play_after_pause, false);
+            $("button[name='play']")[0].addEventListener("mouseleave", _update, false);
+        };
+        _enter = function(){
+            index = parseInt(this.innerText);
+            event.preventDefault();
+            if (currentTrack !== index)
+            {
+                $(this).replaceWith("<button name='play' value='"+index+"' class='btn btn-success col-1 m-1'>Play</button>");
+                $("button[name='play']")[0].addEventListener("click", _play, false);
+                $("button[name='play']")[0].addEventListener("mouseleave", _update, false);
+            } else if ($('#audio')[0].paused) {
+                $(this).replaceWith("<button name='play' value='"+index+"' class='btn btn-success col-1 m-1'>Play</button>");
+                $("button[name='play']")[0].addEventListener("click", _play_after_pause, false);
+                $("button[name='play']")[0].addEventListener("mouseleave", _update, false);
+            } else {
+                $(this).replaceWith("<button name='pause' value='"+index+"' class='btn btn-success col-1 m-1'>Pause</button>");
+                $("button[name='pause']")[0].addEventListener("click", _pause, false);
+                $("button[name='pause']")[0].addEventListener("mouseleave", _update, false);
+            }
+        };
         $("div[name='track_index']").each(function(){
-            $(this).mouseenter(function(){
-                event.preventDefault();
-                index = parseInt(this.innerText);
-                console.log(index);
-                console.log(currentTrack);
-                _play = function (e) {
-                    currentTrack = index;
-                    $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
-                    $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
-                                               " - " +
-                                               $('#track'+currentTrack).find('div#track_title')[0].innerText;
-                    $('#audio')[0].play();
-                    $.ajax({
-                        type: 'GET',
-                        url: '/update/',
-                        success: function (data, textStatus) {
-                            $('#_list').html(data);
-                        }
-                    });
-                };
-                _update = function (e) {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/update/',
-                        success: function (data, textStatus) {
-                            $('#_list').html(data);
-                        }
-                    });
-                };
-                _play_after_pause = function (e) {
-                    $('#audio')[0].play();
-                    $.ajax({
-                        type: 'GET',
-                        url: '/update/',
-                        success: function (data, textStatus) {
-                            $('#_list').html(data);
-                        }
-                    });
-                };
-                _pause = function (e) {
-                    $('#audio')[0].pause();
-                }
-                if (currentTrack !== index)
-                {
-                    $(this).replaceWith("<button name='play' class='btn btn-success col-1 m-1'>Play</button>");
-                    $("button[name='play']")[0].addEventListener("click", _play, false);
-                    $("button[name='play']")[0].addEventListener("mouseleave", _update, false);
-                } else if ($('#audio')[0].paused) {
-                    $(this).replaceWith("<button name='play' class='btn btn-success col-1 m-1'>Play</button>");
-                    $("button[name='play']")[0].addEventListener("click", _play_after_pause, false);
-                    $("button[name='play']")[0].addEventListener("mouseleave", _update, false);
-                } else {
-                    $(this).replaceWith("<button name='pause' class='btn btn-success col-1 m-1'>Pause</button>");
-                    $("button[name='pause']")[0].addEventListener("click", _pause, false);
-                    $("button[name='pause']")[0].addEventListener("mouseleave", _update, false);
-                }
-            });
+            $(this).mouseenter(_enter);
         });
     });
 </script>
