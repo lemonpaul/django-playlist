@@ -37,7 +37,6 @@ def add(request):
 
 def search(request):
     if request.GET.get('text', False):
-        print('Here')
         text = request.GET['text']
         tracks = client.search(text, type_='track').tracks
         if tracks:
