@@ -45,7 +45,9 @@ def search(request):
                 'artists': list(map(lambda a: a.name, t.artists)),
                 'title': t.title,
                 'album': t.albums[0].title,
-                'id': str(t.id)+":"+str(t.albums[0].id)
+                'id': str(t.id)+":"+str(t.albums[0].id),
+                'duration': "%d:%02d" % (int(t.duration_ms/60/1000),
+                                         int(t.duration_ms/1000)-int(t.duration_ms/60/1000)*60)
             }, tracks.results))
             context = {'results': track_list}
         else:
