@@ -93,7 +93,7 @@ $(function() {
                         elements.audio.attr('src', '');
                         elements.title.text('');
                     } else {
-                        src = elements.audio.attr('src');
+                        src = elements.audio.get(0).src;
                         if (tracks().includes(src)) {
                             index = tracks().indexOf(src) + 1;
                             if (currentTrack !== index)
