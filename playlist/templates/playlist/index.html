@@ -15,12 +15,9 @@
         <div id="player" class="container p-1 fixed-bottom">
             <div class="row align-items-center">
                 <div id="title" class="col m-1"></div>
-                <div class="col-4 m-1"></div>
             </div>
             <div class="row align-items-center justify-content-between">
-                <div class="col m-1">
-                    <audio id="audio" controls class="w-100"></audio>
-                </div>
+                <audio id="audio"></audio>
                 <div class="col-1 m-1">
                     <img class="prev" src="{% static 'playlist/icons/prev.ico' %}" width="80" style="cursor:pointer">
                 </div>
@@ -32,6 +29,21 @@
                 </div>
                 <div class="col-1 m-1">
                     <img class="next" src="{% static 'playlist/icons/next.ico' %}" width="80" style="cursor:pointer">
+                </div>
+                <div class="col m-1">
+                    <input class="position" type="range" min="0" max="1" step="0.0001" value="0" style="width:100%">
+                </div>
+                <div class="col-2 m-1">
+                    <p class="time">0:00/0:00</p>
+                </div>
+                <div class="col-1 m-1">
+                    <img class="unmute" src="{% static 'playlist/icons/unmute.ico' %}" width="80" style="cursor:pointer">
+                </div>
+                <div class="col-1 m-1">
+                    <img class="mute" src="{% static 'playlist/icons/mute.ico' %}" width="80" style="cursor:pointer">
+                </div>
+                <div class="col-1 m-1">
+                    <input class="volume" type="range" min="0" max="1" step="0.01" value="1" style="width:100%">
                 </div>
             </div>
         </div>
