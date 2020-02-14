@@ -5,7 +5,6 @@
         if (currentTrack !== 0) $('div#track_index')[currentTrack-1].innerText = "*";
         $("img.delete").each(function(){
             $(this).click(function(){
-                event.preventDefault();
                 index = Array.from($("img.delete")).indexOf(this) + 1;
                 count = $('#_list').find('div#track_title').length;
                 if (index == currentTrack) {
@@ -27,6 +26,10 @@
                         if (currentTrack == 0) {
                             $('#audio')[0].src = "";
                             $('#title')[0].innerText = "";
+                            if (!paused) {
+                                elements.play.parent().show();
+                                elements.pause.parent().hide();
+                            }
                         } else {
                             $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
                                                            " - " +
@@ -53,12 +56,16 @@
                                        " - " +
                                        $('#track'+currentTrack).find('div#track_title')[0].innerText;
             $('#audio')[0].play();
+            elements.pause.parent().show();
+            elements.play.parent().hide();
             $(this).parent().replaceWith("<div id='pause' class='col-1 m-1'><img name='"+index+"' class='pause' src='/static/playlist/icons/pause.ico' width='80' style='cursor:pointer'></div>");
             $("img.pause")[0].addEventListener("click", _pause, false);
             $("div#pause")[0].addEventListener("mouseleave", _update, false);
         };
         _pause = function (e) {
             $('#audio')[0].pause();
+            elements.play.parent().show();
+            elements.pause.parent().hide();
             index = this.name;
             $(this).parent().replaceWith("<div id='play' class='col-1 m-1'><img name='"+index+"' class='play' src='/static/playlist/icons/play.ico' width='80' style='cursor:pointer'></div>");
             $("img.play")[0].addEventListener("click", _play_after_pause, false);
@@ -66,6 +73,8 @@
         };
         _play_after_pause = function (e) {
             $('#audio')[0].play();
+            elements.pause.parent().show();
+            elements.play.parent().hide();
             index = this.name;
             $(this).parent().replaceWith("<div id='pause' class='col-1 m-1'><img name='"+index+"' class='pause' src='/static/playlist/icons/pause.ico' width='80' style='cursor:pointer'></div>");
             $("img.pause")[0].addEventListener("click", _pause, false);

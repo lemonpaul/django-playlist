@@ -8,10 +8,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-This project use postgresql database and yandex music api library. You need to install them.
+This project use Django, postgresql database and yandex music api library. You need to install them.
 
 ```
-pip3 install psycopg2 yandex-music
+pip3 install Django psycopg2 yandex-music
 ```
 
 ### Installing

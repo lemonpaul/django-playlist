@@ -19,8 +19,12 @@ var elements = {
     audio: $('#audio'),
     title: $('#title'),
     next: $('img.next'),
+    play: $('img.play'),
+    pause: $('img.pause'),
     prev: $('img.prev')
 };
+
+elements.pause.parent().hide();
 
 if (total() !== 0)
 {
@@ -30,6 +34,20 @@ if (total() !== 0)
 };
 
 $(function() {
+    elements.pause.click(function (e) {
+        e.preventDefault();
+        elements.audio.get(0).pause();
+        elements.play.parent().show();
+        elements.pause.parent().hide();
+    });
+    elements.play.click(function (e) {
+        e.preventDefault();
+        if (currentTrack !== 0) {
+            elements.audio.get(0).play();
+            elements.pause.parent().show();
+            elements.play.parent().hide();
+        }
+    });
     elements.next.click(function (e) {
         e.preventDefault();
         paused = elements.audio.get(0).paused;
