@@ -4,6 +4,7 @@ import datetime
 from django.core.files import File
 from django.shortcuts import render
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from .models import Track
 
 from yandex_music.client import Client
@@ -32,31 +33,39 @@ def add(request):
         new_track.save()
         context = {'track_list': Track.objects.all().order_by('add_at')}
         return render(request, 'playlist/_list.html', context)
-    return render(request, 'playlist/_list.html')
+    else:
+        raise PermissionDenied
 
 
 def search(request):
-    if request.GET.get('text', False):
-        text = request.GET['text']
-        tracks = client.search(text, type_='track').tracks
-        if tracks:
-            track_list = list(map(lambda t: {
-                'artists': list(map(lambda a: a.name, t.artists)),
-                'title': t.title,
-                'album': t.albums[0].title,
-                'id': str(t.id)+":"+str(t.albums[0].id),
-                'duration': "%d:%02d" % (int(t.duration_ms/60/1000),
-                                         int(t.duration_ms/1000)-int(t.duration_ms/60/1000)*60)
-            }, tracks.results))
-            context = {'results': track_list}
+    if request.is_ajax():
+        if request.GET.get('text', False):
+            text = request.GET['text']
+            tracks = client.search(text, type_='track').tracks
+            if tracks:
+                track_list = list(map(lambda t: {
+                    'artists': list(map(lambda a: a.name, t.artists)),
+                    'title': t.title,
+                    'album': t.albums[0].title,
+                    'id': str(t.id)+":"+str(t.albums[0].id),
+                    'duration': "%d:%02d" % (int(t.duration_ms/60/1000),
+                                             int(t.duration_ms/1000)-int(t.duration_ms/60/1000)*60)
+                }, tracks.results))
+                context = {'results': track_list}
+            else:
+                context = {'results': []}
+            return render(request, 'playlist/_search.html', context)
         else:
-            context = {'results': []}
-        return render(request, 'playlist/_search.html', context)
-    return render(request, 'playlist/_search.html')
+            return render(request, 'playlist/_search.html')
+    else:
+        raise PermissionDenied
 
 
 def clear(request):
-    return render(request, 'playlist/_search.html')
+    if request.is_ajax():
+        return render(request, 'playlist/_search.html')
+    else:
+        raise PermissionDenied
 
 
 def delete(request):
@@ -66,13 +75,14 @@ def delete(request):
             track.delete()
             context = {'track_list': Track.objects.all().order_by('add_at')}
             return render(request, 'playlist/_list.html', context)
-    return render(request, 'playlist/_list.html')
+    else:
+        raise PermissionDenied
 
 
 def update(request):
-    if request.method == 'GET':
-        if request.is_ajax():
+    if request.is_ajax():
+        if request.method == 'GET':
             context = {'track_list': Track.objects.all().order_by('add_at')}
             return render(request, 'playlist/_list.html', context)
-    return render(request, 'playlist/_list.html')
-
+    else:
+        raise PermissionDenied
