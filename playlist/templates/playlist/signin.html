@@ -1,0 +1,22 @@
+{% load static %}
+<!doctype html>
+<html style="height: 100%">
+    <head>
+        <title>Yandex Music Playlist</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'playlist/bootstrap.min.css' %}">
+    </head>
+    <body style="background-color: #121212; color: #fff; font-size: 28px; height: 100%; display: flex; align-items: center">
+        <form class="container my-0 mx-auto w-25 p-1" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <input class="col m-1" name="username" type="text" placeholder="Login" style="background-color: transparent; color: #fff;" required>
+            </div>
+            <div class="row">
+                <input class="col m-1" name="password" type="password" placeholder="Password" style="background-color: transparent; color: #fff;" required>
+            </div>
+            <div class="row">
+                <button class="col-12 m-1 btn btn-primary" type="submit">Sign in</button>
+            </div>
+        </form>
+    </body>
+</html>
