@@ -4,7 +4,6 @@ import datetime
 from django.core.files import File
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
 from .models import Track
 
@@ -14,11 +13,8 @@ client = Client.fromCredentials(settings.YANDEX_MUSIC_USER, settings.YANDEX_MUSI
 
 
 def index(request):
-    if request.user.is_authenticated:
-        context = {'track_list': Track.objects.all().order_by('add_at'), 'user': request.user.username}
-        return render(request, 'playlist/index.html', context)
-    else:
-        return redirect('signin')
+    context = {'track_list': Track.objects.all().order_by('add_at'), 'user': request.user.username}
+    return render(request, 'playlist/index.html', context)
 
 
 def add(request):
@@ -90,22 +86,3 @@ def update(request):
             return render(request, 'playlist/_list.html', context)
     else:
         raise PermissionDenied
-
-
-def signin(request):
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            return render(request, 'playlist/signin.html')
-    else:
-        return render(request, 'playlist/signin.html')
-
-
-def signout(request):
-    logout(request)
-    return redirect('signin')

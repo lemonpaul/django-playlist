@@ -7,16 +7,6 @@
         <title>Yandex Music Playlist</title>
     </head>
     <body style="padding-bottom: 10rem; background-color: #121212; color: #fff; font-size: 28px;">
-        <div id="info" class="container p-1">
-            <div class="row dropdown justify-content-end">
-                <div class="col-1 dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" style="cursor: pointer">
-                    {{ user }}
-                </div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{% url 'signout' %}">Log out</a>
-                </div>
-            </div>
-        </div>
         <div id="_search" class="container p-1">
             {% include "playlist/_search.html" %}
         </div>
