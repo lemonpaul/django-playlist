@@ -23,7 +23,7 @@ var current_time = function() {
 
 var total = function() { return $('#_list').find('div#track_title').length; };
 
-var dynamic_buttons = function() { return $('img.play').length !== 0 || $('img.pause').length !== 0; };
+var dynamic_buttons = function() { return $('#_list').find($('img.play')).length !== 0 || $('#_list').find($('img.pause')).length !== 0; };
 
 var list = function(data) { $('#_list').html(data); };
 
