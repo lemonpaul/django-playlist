@@ -26,6 +26,7 @@
                         if (currentTrack == 0) {
                             $('#audio')[0].src = "";
                             $('#title')[0].innerText = "";
+                            elements.time.text(current_time());
                             if (!paused) {
                                 elements.play.parent().show();
                                 elements.pause.parent().hide();
@@ -39,6 +40,7 @@
                                 $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
                                 if (!paused) $('#audio')[0].play();
                             }
+                            elements.time.text(current_time());
                         }
                     }
                 });

@@ -23,7 +23,9 @@ var current_time = function() {
 
 var total = function() { return $('#_list').find('div#track_title').length; };
 
-var dynamic_buttons = function() { return $('#_list').find($('img.play')).length !== 0 || $('#_list').find($('img.pause')).length !== 0; };
+var dynamic_buttons = function() {
+    return $('#_list').find($('img.play')).length !== 0 || $('#_list').find($('img.pause')).length !== 0;
+};
 
 var list = function(data) { $('#_list').html(data); };
 
@@ -62,7 +64,7 @@ $(function() {
         elements.audio.get(0).pause();
         elements.play.parent().show();
         elements.pause.parent().hide();
-        elements.pause.text(current_time());
+        elements.time.text(current_time());
     });
     elements.play.click(function (e) {
         e.preventDefault();
@@ -70,7 +72,7 @@ $(function() {
             elements.audio.get(0).play();
             elements.pause.parent().show();
             elements.play.parent().hide();
-            elements.pause.text(current_time());
+            elements.time.text(current_time());
         }
     });
     elements.next.click(function (e) {
@@ -88,6 +90,7 @@ $(function() {
             current_index('*');
             elements.audio.attr('src', current_url);
             elements.title.text(current_title);
+            elements.time.text(current_time());
             if (!paused) elements.audio.get(0).play();
         }
     });
@@ -106,6 +109,7 @@ $(function() {
             current_index('*');
             elements.audio.attr('src', current_url);
             elements.title.text(current_title);
+            elements.time.text(current_time());
             if (!paused) elements.audio.get(0).play();
         }
     });
