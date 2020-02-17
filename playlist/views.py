@@ -1,8 +1,8 @@
-import os
-import datetime
+from os import remove, path
+from datetime import timedelta
 
 from django.core.files import File
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from .models import Track
@@ -13,7 +13,7 @@ client = Client.fromCredentials(settings.YANDEX_MUSIC_USER, settings.YANDEX_MUSI
 
 
 def index(request):
-    context = {'track_list': Track.objects.all().order_by('add_at'), 'user': request.user.username}
+    context = {'track_list': Track.objects.all().order_by('add_at')}
     return render(request, 'playlist/index.html', context)
 
 
@@ -23,13 +23,12 @@ def add(request):
         track = client.tracks(id_value)[0]
         title = track.title
         artists = list(map(lambda t: t.name, track.artists))
-        duration = datetime.timedelta(milliseconds=track.duration_ms)
+        duration = timedelta(milliseconds=track.duration_ms)
         new_track = Track.objects.create(title=title, artists=artists, duration=duration)
         new_track.save()
-        track.download(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media/tracks/track.mp3'))
-        new_track.file.save('track.mp3', File(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                              'media/tracks/track.mp3'), 'rb')))
-        os.remove(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media/tracks/track.mp3'))
+        track.download(path.join(settings.MEDIA_ROOT, 'tracks/track.mp3'))
+        new_track.file.save('track.mp3', File(open(path.join(settings.MEDIA_ROOT, 'tracks/track.mp3'), 'rb')))
+        remove(path.join(settings.MEDIA_ROOT, 'tracks/track.mp3'))
         new_track.save()
         context = {'track_list': Track.objects.all().order_by('add_at')}
         return render(request, 'playlist/_list.html', context)
