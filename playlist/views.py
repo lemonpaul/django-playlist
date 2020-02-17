@@ -1,5 +1,6 @@
 from os import remove, path
-from datetime import timedelta
+from datetime import timedelta, datetime
+from hashlib import sha1
 
 from django.core.files import File
 from django.shortcuts import render
@@ -13,6 +14,8 @@ client = Client.fromCredentials(settings.YANDEX_MUSIC_USER, settings.YANDEX_MUSI
 
 
 def index(request):
+    if not request.session.get('user_id', False):
+        request.session['user_id'] = sha1(str.encode(str(datetime.now().timestamp()))).hexdigest()
     context = {'track_list': Track.objects.all().order_by('add_at')}
     return render(request, 'playlist/index.html', context)
 
