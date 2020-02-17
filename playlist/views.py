@@ -88,3 +88,20 @@ def update(request):
             return render(request, 'playlist/_list.html', context)
     else:
         raise PermissionDenied
+
+
+def vote(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            track = Track.objects.get(id=request.POST['id'])
+            if request.POST['vote'] == 'up':
+                track.rate = track.rate + 1
+            elif request.POST['vote'] == 'down':
+                track.rate = track.rate - 1
+            track.save()
+            context = {'track_list': Track.objects.all().order_by('add_at')}
+            return render(request, 'playlist/_list.html', context)
+        else:
+            raise PermissionDenied
+    else:
+        raise PermissionDenied

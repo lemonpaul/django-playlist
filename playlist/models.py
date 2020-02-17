@@ -11,6 +11,7 @@ class Track(models.Model):
     duration = models.DurationField()
     file = models.FileField(upload_to='tracks/', null=True, blank=True)
     add_at = models.DateTimeField(auto_now_add=True)
+    rate = models.IntegerField(default=0)
 
     def duration_string(self):
         secs = self.duration.seconds

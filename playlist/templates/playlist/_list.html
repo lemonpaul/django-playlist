@@ -46,7 +46,31 @@
                 });
             });
         });
-        _play = function (e) {
+        $("img.down").each(function(){
+            $(this).click(function(){
+                $.ajax({
+                    type: 'POST',
+                    url: '/vote/',
+                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name, 'vote': 'down'},
+                    success: function (data, textStatus) {
+                        $('#_list').html(data);
+                    }
+                });
+            });
+        });
+        $("img.up").each(function(){
+            $(this).click(function(){
+                $.ajax({
+                    type: 'POST',
+                    url: '/vote/',
+                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name, 'vote': 'up'},
+                    success: function (data, textStatus) {
+                        $('#_list').html(data);
+                    }
+                });
+            });
+        });
+        _play = function() {
             if (index < currentTrack) {
                 $('div#track_index')[currentTrack-2].innerText = currentTrack;
             } else {
@@ -64,7 +88,7 @@
             $("img.pause")[0].addEventListener("click", _pause, false);
             $("div#pause")[0].addEventListener("mouseleave", _update, false);
         };
-        _pause = function (e) {
+        _pause = function() {
             $('#audio')[0].pause();
             elements.play.parent().show();
             elements.pause.parent().hide();
@@ -73,7 +97,7 @@
             $("img.play")[0].addEventListener("click", _play_after_pause, false);
             $("div#play")[0].addEventListener("mouseleave", _update, false);
         };
-        _play_after_pause = function (e) {
+        _play_after_pause = function() {
             $('#audio')[0].play();
             elements.pause.parent().show();
             elements.play.parent().hide();
@@ -82,7 +106,7 @@
             $("img.pause")[0].addEventListener("click", _pause, false);
             $("div#pause")[0].addEventListener("mouseleave", _update, false);
         };
-        _update = function (e) {
+        _update = function() {
             index = this.children[0].name;
             if (currentTrack == index) {
                 $(this).replaceWith("<div id='track_index' class='col-1 m-1'>*</div>");
@@ -94,7 +118,6 @@
         };
         _enter = function() {
             index = (this.innerText == "*") ? currentTrack : parseInt(this.innerText);
-            event.preventDefault();
             if (currentTrack !== index)
             {
                 $(this).replaceWith("<div id='play' class='col-1 m-1'><img name='"+index+"' class='play' src='/static/playlist/icons/play.ico' width='80' style='cursor:pointer'></div>");
@@ -121,6 +144,9 @@
     <div class="col m-1">Artist</div>
     <div class="col-1 m-1"></div>
     <div class="col-1 m-1"></div>
+    <div class="col-1 m-1"></div>
+    <div class="col-1 m-1"></div>
+    <div class="col-1 m-1"></div>
 </div>
 {% for track in track_list %}
 <div id="track{{ forloop.counter }}" class="row align-items-center">
@@ -128,6 +154,9 @@
     <div id="track_title" class="col m-1">{{ track.title }}</div>
     <div id="track_artist" class="col m-1">{{ track.artists|join:", " }}</div>
     {% if track.file %}<div class="col-1" hidden><a id="track_url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
+    <div id="track_down" class="col-1 m-1"><img name="{{ track.id }}" class="down" src="{% static 'playlist/icons/down.ico' %}" width="80" style="cursor:pointer"></div>
+    <div id="track_rate" class="col-1 m-1 text-center">{{ track.rate }}</div>
+    <div id="track_up" class="col-1 m-1"><img name="{{ track.id }}" class="up" src="{% static 'playlist/icons/up.ico' %}" width="80" style="cursor:pointer"></div>
     <div id="track_delete" class="col-1 m-1"><img name="{{ track.id }}" class="delete" src="{% static 'playlist/icons/delete.ico' %}" width="80" style="cursor:pointer"></div>
     <div id="track_duration" class="col-1 m-1">{{ track.duration_string }}</div>
 </div>
