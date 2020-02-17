@@ -48,24 +48,46 @@
         });
         $("img.down").each(function(){
             $(this).click(function(){
+                trackId = this.name;
                 $.ajax({
                     type: 'POST',
                     url: '/vote/',
                     data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name, 'vote': 'down'},
                     success: function (data, textStatus) {
                         $('#_list').html(data);
+                        currentTrack = Array.from($("img.down")).indexOf($("img.down[name="+trackId+"]").get(0)) + 1;
+                        $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
+                                                   " - " +
+                                                   $('#track'+currentTrack).find('div#track_title')[0].innerText;
+                        if ($('#audio')[0].src !== $('#track'+currentTrack).find('a#track_url')[0].href)
+                        {
+                            $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
+                            if (!paused) $('#audio')[0].play();
+                        }
+                        elements.time.text(current_time());
                     }
                 });
             });
         });
         $("img.up").each(function(){
             $(this).click(function(){
+                trackId = this.name;
                 $.ajax({
                     type: 'POST',
                     url: '/vote/',
                     data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name, 'vote': 'up'},
                     success: function (data, textStatus) {
                         $('#_list').html(data);
+                        currentTrack = Array.from($("img.up")).indexOf($("img.up[name="+trackId+"]").get(0)) + 1;
+                        $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
+                                                   " - " +
+                                                   $('#track'+currentTrack).find('div#track_title')[0].innerText;
+                        if ($('#audio')[0].src !== $('#track'+currentTrack).find('a#track_url')[0].href)
+                        {
+                            $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
+                            if (!paused) $('#audio')[0].play();
+                        }
+                        elements.time.text(current_time());
                     }
                 });
             });

@@ -16,7 +16,7 @@ client = Client.fromCredentials(settings.YANDEX_MUSIC_USER, settings.YANDEX_MUSI
 def index(request):
     if not request.session.get('user_id', False):
         request.session['user_id'] = sha1(str.encode(str(datetime.now().timestamp()))).hexdigest()
-    context = {'track_list': Track.objects.all().order_by('add_at')}
+    context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
     return render(request, 'playlist/index.html', context)
 
 
@@ -33,7 +33,7 @@ def add(request):
         new_track.file.save('track.mp3', File(open(path.join(settings.MEDIA_ROOT, 'tracks/track.mp3'), 'rb')))
         remove(path.join(settings.MEDIA_ROOT, 'tracks/track.mp3'))
         new_track.save()
-        context = {'track_list': Track.objects.all().order_by('add_at')}
+        context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
         return render(request, 'playlist/_list.html', context)
     else:
         raise PermissionDenied
@@ -75,7 +75,7 @@ def delete(request):
         if request.is_ajax():
             track = Track.objects.get(id=request.POST['id'])
             track.delete()
-            context = {'track_list': Track.objects.all().order_by('add_at')}
+            context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
     else:
         raise PermissionDenied
@@ -84,7 +84,7 @@ def delete(request):
 def update(request):
     if request.is_ajax():
         if request.method == 'GET':
-            context = {'track_list': Track.objects.all().order_by('add_at')}
+            context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
     else:
         raise PermissionDenied
@@ -94,12 +94,14 @@ def vote(request):
     if request.is_ajax():
         if request.method == 'POST':
             track = Track.objects.get(id=request.POST['id'])
-            if request.POST['vote'] == 'up':
-                track.rate = track.rate + 1
-            elif request.POST['vote'] == 'down':
-                track.rate = track.rate - 1
-            track.save()
-            context = {'track_list': Track.objects.all().order_by('add_at')}
+            if request.session['user_id'] not in track.voices:
+                track.voices.append(request.session['user_id'])
+                if request.POST['vote'] == 'up':
+                    track.rate = track.rate + 1
+                elif request.POST['vote'] == 'down':
+                    track.rate = track.rate - 1
+                track.save()
+            context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
         else:
             raise PermissionDenied

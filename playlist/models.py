@@ -12,6 +12,7 @@ class Track(models.Model):
     file = models.FileField(upload_to='tracks/', null=True, blank=True)
     add_at = models.DateTimeField(auto_now_add=True)
     rate = models.IntegerField(default=0)
+    voices = ArrayField(models.CharField(max_length=256), default=list)
 
     def duration_string(self):
         secs = self.duration.seconds
