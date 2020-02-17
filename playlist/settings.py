@@ -25,7 +25,7 @@ SECRET_KEY = 'dtt4j4__3=filnjklxjc-y^@fhwmsfl8*s+ic^8h3=53k!u4ev'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.114', 'localhost', 'smooth-cougar-58.localtunnel.me']
+ALLOWED_HOSTS = []
 
 
 # Application definition
