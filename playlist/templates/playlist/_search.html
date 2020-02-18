@@ -1,51 +1,4 @@
 {% load static %}
-<script type="text/javascript">
-    $(function() {
-        $('#search')[0].addEventListener("keypress", function (e) {
-            if (e.key == "Enter")
-            {
-                $.ajax({
-                    type: 'GET',
-                    url: '/search/',
-                    data: {'text': this.value},
-                    success: function (data, textStatus) {
-                        $('#_search').html(data);
-                        this.value = "";
-                    }
-                });
-            }
-        }, false);
-
-        $("img.add").each(function(){
-            $(this).click(function(){
-                $.ajax({
-                    type: 'POST',
-                    url: '/add/',
-                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name},
-                    success: function (data, textStatus) {
-                        $('#_list').html(data);
-                        $.ajax({
-                            type: 'GET',
-                            url: '/clear/',
-                            success: function (data, textStatus) {
-                                $('#_search').html(data);
-                                this.value = "";
-                            }
-                        });
-                        if (currentTrack == 0) {
-                            currentTrack = 1;
-                            $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
-                            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
-                                                           " - " +
-                                                           $('#track'+currentTrack).find('div#track_title')[0].innerText;
-                            elements.time.text(current_time());
-                         }
-                    }
-                });
-            });
-        });
-    });
-</script>
 <div class="row align-items-center">
     <input id="search" type="text" name="text" placeholder="Search" class="col m-1" style="background-color: transparent; color: #fff;">
 </div>
@@ -67,3 +20,38 @@
 </div>
 {% endfor %}
 {% endif %}
+<script>
+search_input = $('#search');
+add_buttons = $('img.add');
+
+search_input.keypress(function(event) {
+    if (event.key === "Enter") {
+        $.ajax({
+            url: '/search/',
+            data: {'text': search_input.val()},
+            success: function(data) {
+                $('#_search').html(data);
+            }
+        });
+    }
+});
+
+add_buttons.each(function () {
+    $(this).click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/add/',
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
+            success: function(data) {
+                $('#_list').html(data);
+                $.ajax({
+                    url: '/clear/',
+                    success: function(data) {
+                        $('#_search').html(data);
+                    }
+                });
+            }
+        });
+    });
+});
+</script>

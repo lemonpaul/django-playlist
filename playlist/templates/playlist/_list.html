@@ -1,147 +1,5 @@
 {% load static %}
 {% if track_list %}
-<script type="text/javascript">
-    $(function() {
-        if (currentTrack !== 0) $('div#track_index')[currentTrack-1].innerText = "*";
-        $("img.delete").each(function(){
-            $(this).click(function(){
-                index = Array.from($("img.delete")).indexOf(this) + 1;
-                count = $('#_list').find('div#track_title').length;
-                if (index == currentTrack) {
-                    if (count == 1) {
-                        currentTrack = 0;
-                    } else if (index == count) {
-                        currentTrack = 1;
-                    }
-                } else if (index < currentTrack) {
-                    --currentTrack;
-                }
-                $.ajax({
-                    type: 'POST',
-                    url: '/delete/',
-                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name},
-                    success: function (data, textStatus) {
-                        $('#_list').html(data);
-                        paused = $('#audio')[0].paused;
-                        if (currentTrack == 0) {
-                            $('#audio')[0].src = "";
-                            $('#title')[0].innerText = "";
-                            elements.time.text(current_time());
-                            if (!paused) {
-                                elements.play.parent().show();
-                                elements.pause.parent().hide();
-                            }
-                        } else {
-                            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
-                                                           " - " +
-                                                           $('#track'+currentTrack).find('div#track_title')[0].innerText;
-                            if ($('#audio')[0].src !== $('#track'+currentTrack).find('a#track_url')[0].href)
-                            {
-                                $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
-                                if (!paused) $('#audio')[0].play();
-                            }
-                            elements.time.text(current_time());
-                        }
-                    }
-                });
-            });
-        });
-        $("img.down").each(function(){
-            $(this).click(function(){
-                trackId = $('#track'+currentTrack).find($('img.down')).get(0).name;
-                $.ajax({
-                    type: 'POST',
-                    url: '/vote/',
-                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name, 'vote': 'down'},
-                    success: function (data, textStatus) {
-                        $('#_list').html(data);
-                        currentTrack = Array.from($("img.down")).indexOf($("img.down[name="+trackId+"]").get(0)) + 1;
-                    }
-                });
-            });
-        });
-        $("img.up").each(function(){
-            $(this).click(function(){
-                trackId = $('#track'+currentTrack).find($('img.up')).get(0).name;
-                $.ajax({
-                    type: 'POST',
-                    url: '/vote/',
-                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': this.name, 'vote': 'up'},
-                    success: function (data, textStatus) {
-                        $('#_list').html(data);
-                        currentTrack = Array.from($("img.up")).indexOf($("img.up[name="+trackId+"]").get(0)) + 1;
-                    }
-                });
-            });
-        });
-        _play = function() {
-            if (index < currentTrack) {
-                $('div#track_index')[currentTrack-2].innerText = currentTrack;
-            } else {
-                $('div#track_index')[currentTrack-1].innerText = currentTrack;
-            }
-            currentTrack = index;
-            $('#audio')[0].src = $('#track'+currentTrack).find('a#track_url')[0].href;
-            $('#title')[0].innerText = $('#track'+currentTrack).find('div#track_artist')[0].innerText +
-                                       " - " +
-                                       $('#track'+currentTrack).find('div#track_title')[0].innerText;
-            $('#audio')[0].play();
-            elements.pause.parent().show();
-            elements.play.parent().hide();
-            $(this).parent().replaceWith("<div id='pause' class='col-1 m-1'><img name='"+index+"' class='pause' src='/static/playlist/icons/pause.ico' width='80' style='cursor:pointer'></div>");
-            $("img.pause")[0].addEventListener("click", _pause, false);
-            $("div#pause")[0].addEventListener("mouseleave", _update, false);
-        };
-        _pause = function() {
-            $('#audio')[0].pause();
-            elements.play.parent().show();
-            elements.pause.parent().hide();
-            index = this.name;
-            $(this).parent().replaceWith("<div id='play' class='col-1 m-1'><img name='"+index+"' class='play' src='/static/playlist/icons/play.ico' width='80' style='cursor:pointer'></div>");
-            $("img.play")[0].addEventListener("click", _play_after_pause, false);
-            $("div#play")[0].addEventListener("mouseleave", _update, false);
-        };
-        _play_after_pause = function() {
-            $('#audio')[0].play();
-            elements.pause.parent().show();
-            elements.play.parent().hide();
-            index = this.name;
-            $(this).parent().replaceWith("<div id='pause' class='col-1 m-1'><img name='"+index+"' class='pause' src='/static/playlist/icons/pause.ico' width='80' style='cursor:pointer'></div>");
-            $("img.pause")[0].addEventListener("click", _pause, false);
-            $("div#pause")[0].addEventListener("mouseleave", _update, false);
-        };
-        _update = function() {
-            index = this.children[0].name;
-            if (currentTrack == index) {
-                $(this).replaceWith("<div id='track_index' class='col-1 m-1'>*</div>");
-                $("div#track_index").filter(function() { return this.innerText == "*"; })[0].addEventListener("mouseenter", _enter, false);
-            } else {
-                $(this).replaceWith("<div id='track_index' class='col-1 m-1'>"+index+"</div>");
-                $("div#track_index").filter(function() { return this.innerText == index; })[0].addEventListener("mouseenter", _enter, false);
-            }
-        };
-        _enter = function() {
-            index = (this.innerText == "*") ? currentTrack : parseInt(this.innerText);
-            if (currentTrack !== index)
-            {
-                $(this).replaceWith("<div id='play' class='col-1 m-1'><img name='"+index+"' class='play' src='/static/playlist/icons/play.ico' width='80' style='cursor:pointer'></div>");
-                $("img.play")[0].addEventListener("click", _play, false);
-                $("#play")[0].addEventListener("mouseleave", _update, false);
-            } else if ($('#audio')[0].paused) {
-                $(this).replaceWith("<div id='play' class='col-1 m-1'><img name='"+index+"' class='play' src='/static/playlist/icons/play.ico' width='80' style='cursor:pointer'></div>");
-                $("img.play")[0].addEventListener("click", _play_after_pause, false);
-                $("#play")[0].addEventListener("mouseleave", _update, false);
-            } else {
-                $(this).replaceWith("<div id='pause' class='col-1 m-1'><img name='"+index+"' class='pause' src='/static/playlist/icons/pause.ico' width='80' style='cursor:pointer'></div>");
-                $("img.pause")[0].addEventListener("click", _pause, false);
-                $("#pause")[0].addEventListener("mouseleave", _update, false);
-            }
-        };
-        $("div#track_index").each(function(){
-            $(this).mouseenter(_enter);
-        });
-    });
-</script>
 <div class="row align-items-center">
     <div class="col-1 m-1">#</div>
     <div class="col m-1">Title</div>
@@ -154,15 +12,59 @@
 </div>
 {% for track in track_list %}
 <div id="track{{ forloop.counter }}" class="row align-items-center">
-    <div id="track_index" class="col-1 m-1">{{ forloop.counter }}</div>
-    <div id="track_title" class="col m-1">{{ track.title }}</div>
-    <div id="track_artist" class="col m-1">{{ track.artists|join:", " }}</div>
-    {% if track.file %}<div class="col-1" hidden><a id="track_url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
+    <div class="index col-1 m-1">{{ forloop.counter }}</div>
+    <div class="title col m-1">{{ track.title }}</div>
+    <div class="artist col m-1">{{ track.artists|join:", " }}</div>
+    {% if track.file %}<div class="col-1" hidden><a name="{{ track.id }}" class="url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
     <div id="track_down" class="col-1 m-1"><img name="{{ track.id }}" class="down" src="{% static 'playlist/icons/down.ico' %}" width="80" style="cursor:pointer"></div>
     <div id="track_rate" class="col-1 m-1 text-center">{{ track.rate }}</div>
     <div id="track_up" class="col-1 m-1"><img name="{{ track.id }}" class="up" src="{% static 'playlist/icons/up.ico' %}" width="80" style="cursor:pointer"></div>
     <div id="track_delete" class="col-1 m-1"><img name="{{ track.id }}" class="delete" src="{% static 'playlist/icons/delete.ico' %}" width="80" style="cursor:pointer"></div>
-    <div id="track_duration" class="col-1 m-1">{{ track.duration_string }}</div>
+    <div class="duration col-1 m-1">{{ track.duration_string }}</div>
 </div>
 {% endfor %}
 {% endif %}
+<script>
+down_buttons = $('img.down');
+up_buttons = $('img.up');
+delete_buttons = $('img.delete');
+
+down_buttons.each(function () {
+    $(this).click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/vote/',
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'vote': 'down', 'id': $(this).attr('name')},
+            success: function(data) {
+                $('#_list').html(data);
+            }
+        });
+    });
+});
+
+up_buttons.each(function () {
+    $(this).click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/vote/',
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'vote': 'up', 'id': $(this).attr('name')},
+            success: function(data) {
+                $('#_list').html(data);
+            }
+        });
+    });
+});
+
+delete_buttons.each(function () {
+    $(this).click(function () {
+        $.ajax({
+            type: 'POST',
+            url: '/delete/',
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
+            success: function(data) {
+                $('#_list').html(data);
+            }
+        });
+    });
+});
+</script>

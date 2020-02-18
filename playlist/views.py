@@ -86,6 +86,13 @@ def update(request):
         if request.method == 'GET':
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
+        elif request.method == 'POST':
+            track = Track.objects.get(id=request.POST['id'])
+            track.add_at = datetime.now()
+            track.rate = 0
+            track.save()
+            context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
+            return render(request, 'playlist/_list.html', context)
     else:
         raise PermissionDenied
 
