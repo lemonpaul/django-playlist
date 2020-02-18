@@ -193,6 +193,15 @@ elements.volume.change(function() {
         elements.mute.parent().show();
     }
 });
+
+setInterval(function() {
+    $.ajax({
+        url: '/update/',
+        success: function (data) {
+            $('#_list').html(data);
+        }
+    });
+}, 5000)
 </script>
     </body>
 </html>
