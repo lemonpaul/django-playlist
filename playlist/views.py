@@ -90,6 +90,8 @@ def update(request):
             track = Track.objects.get(id=request.POST['id'])
             track.add_at = datetime.now()
             track.rate = 0
+            track.voices_down = []
+            track.voices_up = []
             track.save()
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
@@ -101,13 +103,23 @@ def vote(request):
     if request.is_ajax():
         if request.method == 'POST':
             track = Track.objects.get(id=request.POST['id'])
-            if request.session['user_id'] not in track.voices:
-                track.voices.append(request.session['user_id'])
-                if request.POST['vote'] == 'up':
-                    track.rate = track.rate + 1
-                elif request.POST['vote'] == 'down':
-                    track.rate = track.rate - 1
-                track.save()
+            if request.POST['vote'] == 'up':
+                if request.session['user_id'] not in track.voices_up:
+                    if request.session['user_id'] in track.voices_down:
+                        track.rate = track.rate + 1
+                        track.voices_down.remove(request.session['user_id'])
+                    else:
+                        track.rate = track.rate + 1
+                        track.voices_up.append(request.session['user_id'])
+            elif request.POST['vote'] == 'down':
+                if request.session['user_id'] not in track.voices_down:
+                    if request.session['user_id'] in track.voices_up:
+                        track.rate = track.rate - 1
+                        track.voices_up.remove(request.session['user_id'])
+                    else:
+                        track.rate = track.rate - 1
+                        track.voices_down.append(request.session['user_id'])
+            track.save()
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
         else:

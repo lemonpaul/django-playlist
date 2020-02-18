@@ -16,9 +16,17 @@
     <div class="title col m-1">{{ track.title }}</div>
     <div class="artist col m-1">{{ track.artists|join:", " }}</div>
     {% if track.file %}<div class="col-1" hidden><a name="{{ track.id }}" class="url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
-    <div id="track_down" class="col-1 m-1"><img name="{{ track.id }}" class="down" src="{% static 'playlist/icons/down.ico' %}" width="80" style="cursor:pointer"></div>
+    <div id="track_down" class="col-1 m-1">
+        {% if request.session.user_id not in track.voices_down %}
+        <img name="{{ track.id }}" class="down" src="{% static 'playlist/icons/down.ico' %}" width="80" style="cursor:pointer">
+        {% endif %}
+    </div>
     <div id="track_rate" class="col-1 m-1 text-center">{{ track.rate }}</div>
-    <div id="track_up" class="col-1 m-1"><img name="{{ track.id }}" class="up" src="{% static 'playlist/icons/up.ico' %}" width="80" style="cursor:pointer"></div>
+    <div id="track_up" class="col-1 m-1">
+        {% if request.session.user_id not in track.voices_up %}
+        <img name="{{ track.id }}" class="up" src="{% static 'playlist/icons/up.ico' %}" width="80" style="cursor:pointer">
+        {% endif %}
+    </div>
     <div id="track_delete" class="col-1 m-1"><img name="{{ track.id }}" class="delete" src="{% static 'playlist/icons/delete.ico' %}" width="80" style="cursor:pointer"></div>
     <div class="duration col-1 m-1">{{ track.duration_string }}</div>
 </div>
