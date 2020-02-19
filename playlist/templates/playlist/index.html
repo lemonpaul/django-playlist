@@ -94,7 +94,8 @@
 
             let current_id = function() {
                 let href = $('#audio').attr('src');
-                return $('a.url[href$=\''+href+'\']').attr('name');
+                return $('a.url[href$=\''+href+'\']').attr('name') ?
+                       $('a.url[href$=\''+href+'\']').attr('name') : 0;
             };
 
             let current_volume = 1;
@@ -199,6 +200,26 @@
                     url: '/update/',
                     success: function (data) {
                         $('#_list').html(data);
+                        if (elements.audio.attr('src') && current_id() == 0)
+                        {
+                            let paused = elements.audio.get(0).paused;
+                            if (total() > 0) {
+                                elements.title.text(current_title());
+                                elements.audio.attr('src', current_url());
+                                elements.time.text(current_time());
+                                if (!paused) elements.audio.get(0).play();
+                            } else {
+                                elements.title.text('');
+                                elements.audio.attr('src', '');
+                                elements.audio.get(0).currentTime = 0;
+                                elements.position.val(0);
+                                elements.time.text('0:00/0:00');
+                                if (!paused) {
+                                    $('img.pause').parent().hide();
+                                    $('img.play').parent().show();
+                                }
+                            }
+                        }
                     }
                 });
             }, 5000)
