@@ -33,68 +33,68 @@
 {% endfor %}
 {% endif %}
 <script>
-down_buttons = $('img.down');
-up_buttons = $('img.up');
-delete_buttons = $('img.delete');
+    down_buttons = $('img.down');
+    up_buttons = $('img.up');
+    delete_buttons = $('img.delete');
 
-down_buttons.each(function () {
-    $(this).click(function () {
-        $.ajax({
-            type: 'POST',
-            url: '/vote/',
-            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'vote': 'down', 'id': $(this).attr('name')},
-            success: function(data) {
-                $('#_list').html(data);
-            }
+    down_buttons.each(function () {
+        $(this).click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/vote/',
+                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'vote': 'down', 'id': $(this).attr('name')},
+                success: function(data) {
+                    $('#_list').html(data);
+                }
+            });
         });
     });
-});
 
-up_buttons.each(function () {
-    $(this).click(function () {
-        $.ajax({
-            type: 'POST',
-            url: '/vote/',
-            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'vote': 'up', 'id': $(this).attr('name')},
-            success: function(data) {
-                $('#_list').html(data);
-            }
+    up_buttons.each(function () {
+        $(this).click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/vote/',
+                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'vote': 'up', 'id': $(this).attr('name')},
+                success: function(data) {
+                    $('#_list').html(data);
+                }
+            });
         });
     });
-});
 
-delete_buttons.each(function () {
-    $(this).click(function () {
-        let delete_id = $(this).attr('name');
-        let current_id = $('a.url[href$=\''+$('#audio').attr('src')+'\']').attr('name');
-        $.ajax({
-            type: 'POST',
-            url: '/delete/',
-            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
-            success: function(data) {
-                $('#_list').html(data);
-                let paused = $('#audio').paused;
-                if ($('div.index').length == 0) {
-                    $('#title').text('');
-                    $('#audio').attr('src', '');
-                    $('#audio').get(0).currentTime = 0;
-                    $('input.position').val(0);
-                    $('p.time').text('0:00/0:00');
-                    if (!paused) {
-                        $('img.pause').parent().hide();
-                        $('img.play').parent().show();
-                    }
-                } else if (current_id == delete_id) {
-                    $('#title').text($('div.artist').get(0).innerText + ' - ' +
-                                     $('div.title').get(0).innerText);
-                    $('#audio').attr('src', $('a.url').attr('href'));
-                    $('p.time').text('0:00/'+$('div.duration').get(0).innerText);
-                    if (!paused) {
-                        $('#audio').get(0).play();
+    delete_buttons.each(function () {
+        $(this).click(function () {
+            let delete_id = $(this).attr('name');
+            let current_id = $('a.url[href$=\''+$('#audio').attr('src')+'\']').attr('name');
+            $.ajax({
+                type: 'POST',
+                url: '/delete/',
+                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
+                success: function(data) {
+                    $('#_list').html(data);
+                    let paused = $('#audio').paused;
+                    if ($('div.index').length == 0) {
+                        $('#title').text('');
+                        $('#audio').attr('src', '');
+                        $('#audio').get(0).currentTime = 0;
+                        $('input.position').val(0);
+                        $('p.time').text('0:00/0:00');
+                        if (!paused) {
+                            $('img.pause').parent().hide();
+                            $('img.play').parent().show();
+                        }
+                    } else if (current_id == delete_id) {
+                        $('#title').text($('div.artist').get(0).innerText + ' - ' +
+                                         $('div.title').get(0).innerText);
+                        $('#audio').attr('src', $('a.url').attr('href'));
+                        $('p.time').text('0:00/'+$('div.duration').get(0).innerText);
+                        if (!paused) {
+                            $('#audio').get(0).play();
+                        }
                     }
                 }
-            }
+            });
         });
     });
-});
 </script>

@@ -45,163 +45,163 @@
                 </div>
             </div>
         </div>
-<script>
-let elements = {
-    title: $('#title'),
-    audio: $('#audio'),
-    play: $('img.play'),
-    pause: $('img.pause'),
-    next: $('img.next'),
-    position: $('input.position'),
-    time: $('p.time'),
-    unmute: $('img.unmute'),
-    mute: $('img.mute'),
-    volume: $('input.volume')
-};
+        <script>
+            let elements = {
+                title: $('#title'),
+                audio: $('#audio'),
+                play: $('img.play'),
+                pause: $('img.pause'),
+                next: $('img.next'),
+                position: $('input.position'),
+                time: $('p.time'),
+                unmute: $('img.unmute'),
+                mute: $('img.mute'),
+                volume: $('input.volume')
+            };
 
-elements.pause.parent().hide();
-elements.unmute.parent().hide();
-elements.position.val(0);
-elements.volume.val(1);
+            elements.pause.parent().hide();
+            elements.unmute.parent().hide();
+            elements.position.val(0);
+            elements.volume.val(1);
 
-let total = function() {
-    return $('div.index').length;
-};
+            let total = function() {
+                return $('div.index').length;
+            };
 
-let current_title = function() {
-    return $('div.artist').get(0).innerText + ' - ' +
-           $('div.title').get(0).innerText;
-};
+            let current_title = function() {
+                return $('div.artist').get(0).innerText + ' - ' +
+                       $('div.title').get(0).innerText;
+            };
 
-let current_url = function() {
-    return $('a.url').attr('href');
-};
+            let current_url = function() {
+                return $('a.url').attr('href');
+            };
 
-let current_time = function() {
-   let current = elements.audio.get(0).currentTime;
-   let current_min = Math.floor(current/60);
-   let current_sec = Math.floor(current-current_min*60);
-   return current_min + ':' +
-          (current_sec < 10 ? '0'+current_sec : current_sec) + '/' +
-          $('div.duration').get(0).innerText;
-};
+            let current_time = function() {
+               let current = elements.audio.get(0).currentTime;
+               let current_min = Math.floor(current/60);
+               let current_sec = Math.floor(current-current_min*60);
+               return current_min + ':' +
+                      (current_sec < 10 ? '0'+current_sec : current_sec) + '/' +
+                      $('div.duration').get(0).innerText;
+            };
 
-let current_position = function() {
-    let current = elements.audio.get(0).currentTime;
-    let total = elements.audio.get(0).duration;
-    return isNaN(total) ? 0 : current/total;
-};
+            let current_position = function() {
+                let current = elements.audio.get(0).currentTime;
+                let total = elements.audio.get(0).duration;
+                return isNaN(total) ? 0 : current/total;
+            };
 
-let current_id = function() {
-    let href = $('#audio').attr('src');
-    return $('a.url[href$=\''+href+'\']').attr('name');
-};
+            let current_id = function() {
+                let href = $('#audio').attr('src');
+                return $('a.url[href$=\''+href+'\']').attr('name');
+            };
 
-let current_volume = 1;
+            let current_volume = 1;
 
-elements.audio.on('timeupdate', function() {
-    elements.time.text(current_time());
-    elements.position.val(current_position());
-});
-
-elements.audio.on('ended', function() {
-    if (total() > 0) {
-        $.ajax({
-            type: 'POST',
-            url: '/update/',
-            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': current_id()},
-            success: function (data) {
-                $('#_list').html(data);
-                elements.title.text(current_title());
-                elements.audio.attr('src', current_url());
+            elements.audio.on('timeupdate', function() {
                 elements.time.text(current_time());
-                elements.audio.get(0).play();
-            }
-        });
-    }
-});
+                elements.position.val(current_position());
+            });
 
-elements.play.click(function() {
-    if (total() > 0) {
-        elements.play.parent().hide();
-        elements.pause.parent().show();
-        if (!elements.audio.attr('src')) {
-            elements.title.text(current_title());
-            elements.audio.attr('src', current_url());
-        }
-        elements.time.text(current_time());
-        elements.audio.get(0).play();
-    }
-});
+            elements.audio.on('ended', function() {
+                if (total() > 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/update/',
+                        data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': current_id()},
+                        success: function (data) {
+                            $('#_list').html(data);
+                            elements.title.text(current_title());
+                            elements.audio.attr('src', current_url());
+                            elements.time.text(current_time());
+                            elements.audio.get(0).play();
+                        }
+                    });
+                }
+            });
 
-elements.pause.click(function() {
-    elements.pause.parent().hide();
-    elements.play.parent().show();
-    elements.audio.get(0).pause();
-});
+            elements.play.click(function() {
+                if (total() > 0) {
+                    elements.play.parent().hide();
+                    elements.pause.parent().show();
+                    if (!elements.audio.attr('src')) {
+                        elements.title.text(current_title());
+                        elements.audio.attr('src', current_url());
+                    }
+                    elements.time.text(current_time());
+                    elements.audio.get(0).play();
+                }
+            });
 
-elements.next.click(function() {
-    if (total() > 0 && elements.audio.attr('src')) {
-        $.ajax({
-            type: 'POST',
-            url: '/update/',
-            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': current_id()},
-            success: function (data) {
-                $('#_list').html(data);
-                let paused = elements.audio.get(0).paused;
-                elements.title.text(current_title());
-                elements.audio.attr('src', current_url());
-                elements.time.text(current_time());
-                if (!paused) elements.audio.get(0).play();
-            }
-        });
-    }
-});
+            elements.pause.click(function() {
+                elements.pause.parent().hide();
+                elements.play.parent().show();
+                elements.audio.get(0).pause();
+            });
 
-elements.position.change(function() {
-    if (elements.audio.attr('src')) {
-        let position = $(this).val();
-        elements.audio.get(0).currentTime = position * elements.audio.get(0).duration;
-    } else {
-        $(this).val(0);
-    }
-});
+            elements.next.click(function() {
+                if (total() > 0 && elements.audio.attr('src')) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/update/',
+                        data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': current_id()},
+                        success: function (data) {
+                            $('#_list').html(data);
+                            let paused = elements.audio.get(0).paused;
+                            elements.title.text(current_title());
+                            elements.audio.attr('src', current_url());
+                            elements.time.text(current_time());
+                            if (!paused) elements.audio.get(0).play();
+                        }
+                    });
+                }
+            });
 
-elements.mute.click(function() {
-    elements.mute.parent().hide();
-    elements.unmute.parent().show();
-    current_volume = elements.audio.get(0).volume;
-    elements.audio.get(0).volume = 0;
-    elements.volume.val(0);
-});
+            elements.position.change(function() {
+                if (elements.audio.attr('src')) {
+                    let position = $(this).val();
+                    elements.audio.get(0).currentTime = position * elements.audio.get(0).duration;
+                } else {
+                    $(this).val(0);
+                }
+            });
 
-elements.unmute.click(function() {
-    elements.unmute.parent().hide();
-    elements.mute.parent().show();
-    elements.audio.get(0).volume = current_volume;
-    elements.volume.val(current_volume);
-});
+            elements.mute.click(function() {
+                elements.mute.parent().hide();
+                elements.unmute.parent().show();
+                current_volume = elements.audio.get(0).volume;
+                elements.audio.get(0).volume = 0;
+                elements.volume.val(0);
+            });
 
-elements.volume.change(function() {
-    let volume = $(this).val();
-    elements.audio.get(0).volume = volume;
-    if (volume == 0) {
-        elements.mute.parent().hide();
-        elements.unmute.parent().show();
-    } else {
-        elements.unmute.parent().hide();
-        elements.mute.parent().show();
-    }
-});
+            elements.unmute.click(function() {
+                elements.unmute.parent().hide();
+                elements.mute.parent().show();
+                elements.audio.get(0).volume = current_volume;
+                elements.volume.val(current_volume);
+            });
 
-setInterval(function() {
-    $.ajax({
-        url: '/update/',
-        success: function (data) {
-            $('#_list').html(data);
-        }
-    });
-}, 5000)
-</script>
+            elements.volume.change(function() {
+                let volume = $(this).val();
+                elements.audio.get(0).volume = volume;
+                if (volume == 0) {
+                    elements.mute.parent().hide();
+                    elements.unmute.parent().show();
+                } else {
+                    elements.unmute.parent().hide();
+                    elements.mute.parent().show();
+                }
+            });
+
+            setInterval(function() {
+                $.ajax({
+                    url: '/update/',
+                    success: function (data) {
+                        $('#_list').html(data);
+                    }
+                });
+            }, 5000)
+        </script>
     </body>
 </html>

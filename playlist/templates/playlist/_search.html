@@ -21,37 +21,37 @@
 {% endfor %}
 {% endif %}
 <script>
-search_input = $('#search');
-add_buttons = $('img.add');
+    search_input = $('#search');
+    add_buttons = $('img.add');
 
-search_input.keypress(function(event) {
-    if (event.key === "Enter") {
-        $.ajax({
-            url: '/search/',
-            data: {'text': search_input.val()},
-            success: function(data) {
-                $('#_search').html(data);
-            }
-        });
-    }
-});
+    search_input.keypress(function(event) {
+        if (event.key === "Enter") {
+            $.ajax({
+                url: '/search/',
+                data: {'text': search_input.val()},
+                success: function(data) {
+                    $('#_search').html(data);
+                }
+            });
+        }
+    });
 
-add_buttons.each(function () {
-    $(this).click(function () {
-        $.ajax({
-            type: 'POST',
-            url: '/add/',
-            data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
-            success: function(data) {
-                $('#_list').html(data);
-                $.ajax({
-                    url: '/clear/',
-                    success: function(data) {
-                        $('#_search').html(data);
-                    }
-                });
-            }
+    add_buttons.each(function () {
+        $(this).click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/add/',
+                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
+                success: function(data) {
+                    $('#_list').html(data);
+                    $.ajax({
+                        url: '/clear/',
+                        success: function(data) {
+                            $('#_search').html(data);
+                        }
+                    });
+                }
+            });
         });
     });
-});
 </script>
