@@ -2,11 +2,12 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" type="text/css" href="{% static 'playlist/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'playlist/style.css' %}">
         <script src="{% static 'playlist/jquery-3.4.1.min.js' %}"></script>
         <script src="{% static 'playlist/bootstrap.bundle.min.js' %}"></script>
         <title>Yandex Music Playlist</title>
     </head>
-    <body style="padding-bottom: 10rem; background-color: #121212; color: #fff; font-size: 28px;">
+    <body>
         <div id="_search" class="container p-1">
             {% include "playlist/_search.html" %}
         </div>
@@ -20,28 +21,28 @@
             <div class="row align-items-center justify-content-between">
                 <audio id="audio"></audio>
                 <div class="col-1 m-1">
-                    <img class="play" src="{% static 'playlist/icons/play.ico' %}" width="80" style="cursor:pointer">
+                    <img class="play" src="{% static 'playlist/icons/play.ico' %}">
                 </div>
                 <div class="col-1 m-1">
-                    <img class="pause" src="{% static 'playlist/icons/pause.ico' %}" width="80" style="cursor:pointer">
+                    <img class="pause" src="{% static 'playlist/icons/pause.ico' %}">
                 </div>
                 <div class="col-1 m-1">
-                    <img class="next" src="{% static 'playlist/icons/next.ico' %}" width="80" style="cursor:pointer">
+                    <img class="next" src="{% static 'playlist/icons/next.ico' %}">
                 </div>
                 <div class="col m-1">
-                    <input class="position" type="range" min="0" max="1" step="0.0001" value="0" style="width:100%">
+                    <input class="position" type="range" min="0" max="1" step="0.0001" value="0">
                 </div>
                 <div class="col-2 m-1">
                     <p class="time">0:00/0:00</p>
                 </div>
                 <div class="col-1 m-1">
-                    <img class="unmute" src="{% static 'playlist/icons/unmute.ico' %}" width="80" style="cursor:pointer">
+                    <img class="unmute" src="{% static 'playlist/icons/unmute.ico' %}">
                 </div>
                 <div class="col-1 m-1">
-                    <img class="mute" src="{% static 'playlist/icons/mute.ico' %}" width="80" style="cursor:pointer">
+                    <img class="mute" src="{% static 'playlist/icons/mute.ico' %}">
                 </div>
                 <div class="col-1 m-1">
-                    <input class="volume" type="range" min="0" max="1" step="0.01" value="1" style="width:100%">
+                    <input class="volume" type="range" min="0" max="1" step="0.01" value="1">
                 </div>
             </div>
         </div>

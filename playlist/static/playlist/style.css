@@ -1,0 +1,20 @@
+body {
+    padding-bottom: 10rem;
+    background-color: #121212;
+    color: #fff;
+    font-size: 28px;
+}
+
+#search {
+    background-color: transparent;
+    color: #fff;
+}
+
+.position, .volume {
+    width: 100%;
+}
+
+img {
+    cursor: pointer;
+    width: 80px;
+}
