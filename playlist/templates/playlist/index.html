@@ -118,6 +118,7 @@
                             elements.audio.attr('src', current_url());
                             elements.time.text(current_time());
                             elements.audio.get(0).play();
+                            $('title').text(current_title());
                         }
                     });
                 }
@@ -133,6 +134,7 @@
                     }
                     elements.time.text(current_time());
                     elements.audio.get(0).play();
+                    $('title').text(current_title());
                 }
             });
 
@@ -140,6 +142,7 @@
                 elements.pause.parent().hide();
                 elements.play.parent().show();
                 elements.audio.get(0).pause();
+                $('title').text('Yandex Music Playlist');
             });
 
             elements.next.click(function() {
@@ -154,7 +157,10 @@
                             elements.title.text(current_title());
                             elements.audio.attr('src', current_url());
                             elements.time.text(current_time());
-                            if (!paused) elements.audio.get(0).play();
+                            if (!paused) {
+                                elements.audio.get(0).play();
+                                $('title').text(current_title());
+                            }
                         }
                     });
                 }
@@ -208,7 +214,10 @@
                                 elements.title.text(current_title());
                                 elements.audio.attr('src', current_url());
                                 elements.time.text(current_time());
-                                if (!paused) elements.audio.get(0).play();
+                                if (!paused) {
+                                    elements.audio.get(0).play();
+                                    $('title').text(current_title());
+                                }
                             } else {
                                 elements.title.text('');
                                 elements.audio.attr('src', '');
@@ -218,6 +227,7 @@
                                 if (!paused) {
                                     $('img.pause').parent().hide();
                                     $('img.play').parent().show();
+                                    $('title').text('Yandex Music Playlist');
                                 }
                             }
                         }

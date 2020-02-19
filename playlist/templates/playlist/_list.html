@@ -83,6 +83,7 @@
                         if (!paused) {
                             $('img.pause').parent().hide();
                             $('img.play').parent().show();
+                            $('title').text('Yandex Music Playlist');
                         }
                     } else if (current_id == delete_id) {
                         $('#title').text($('div.artist').get(0).innerText + ' - ' +
@@ -91,6 +92,7 @@
                         $('p.time').text('0:00/'+$('div.duration').get(0).innerText);
                         if (!paused) {
                             $('#audio').get(0).play();
+                            $('title').text(current_title());
                         }
                     }
                 }
