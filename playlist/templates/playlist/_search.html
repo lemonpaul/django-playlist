@@ -30,6 +30,7 @@
                 url: '/search/',
                 data: {'text': search_input.val()},
                 success: function(data) {
+                    search_input.val('');
                     $('#_search').html(data);
                 }
             });
