@@ -44,12 +44,12 @@
                 data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
                 success: function(data) {
                     $('#_list').html(data);
-                    $.ajax({
-                        url: '/clear/',
-                        success: function(data) {
-                            $('#_search').html(data);
-                        }
-                    });
+                }
+            });
+            $.ajax({
+                url: '/clear/',
+                success: function(data) {
+                    $('#_search').html(data);
                 }
             });
         });
