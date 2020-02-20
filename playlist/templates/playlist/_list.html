@@ -73,7 +73,7 @@
                 data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
                 success: function(data) {
                     $('#_list').html(data);
-                    let paused = $('#audio').paused;
+                    let paused = $('#audio').get(0).paused;
                     if ($('div.index').length == 0) {
                         $('#title').text('');
                         $('#audio').attr('src', '');
