@@ -29,9 +29,9 @@ def add(request):
         duration = timedelta(milliseconds=track.duration_ms)
         new_track = Track.objects.create(title=title, artists=artists, duration=duration)
         new_track.save()
-        track.download(path.join(settings.MEDIA_ROOT, 'tracks/track.mp3'), bitrate_in_kbps=320)
-        new_track.file.save('track.mp3', File(open(path.join(settings.MEDIA_ROOT, 'tracks/track.mp3'), 'rb')))
-        remove(path.join(settings.MEDIA_ROOT, 'tracks/track.mp3'))
+        track.download(path.join(settings.MEDIA_ROOT, 'tracks', 'track.mp3'), bitrate_in_kbps=320)
+        new_track.file.save('track.mp3', File(open(path.join(settings.MEDIA_ROOT, 'tracks', 'track.mp3'), 'rb')))
+        remove(path.join(settings.MEDIA_ROOT, 'tracks', 'track.mp3'))
         new_track.save()
         context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
         return render(request, 'playlist/_list.html', context)
