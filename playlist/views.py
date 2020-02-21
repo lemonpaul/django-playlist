@@ -35,8 +35,7 @@ def add(request):
         new_track.save()
         context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
         return render(request, 'playlist/_list.html', context)
-    else:
-        raise PermissionDenied
+    raise PermissionDenied
 
 
 def search(request):
@@ -59,15 +58,13 @@ def search(request):
             return render(request, 'playlist/_search.html', context)
         else:
             return render(request, 'playlist/_search.html')
-    else:
-        raise PermissionDenied
+    raise PermissionDenied
 
 
 def clear(request):
     if request.is_ajax():
         return render(request, 'playlist/_search.html')
-    else:
-        raise PermissionDenied
+    raise PermissionDenied
 
 
 def delete(request):
@@ -77,8 +74,7 @@ def delete(request):
             track.delete()
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
-    else:
-        raise PermissionDenied
+    raise PermissionDenied
 
 
 def update(request):
@@ -95,8 +91,7 @@ def update(request):
             track.save()
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
-    else:
-        raise PermissionDenied
+    raise PermissionDenied
 
 
 def vote(request):
@@ -122,7 +117,16 @@ def vote(request):
             track.save()
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
-        else:
-            raise PermissionDenied
-    else:
-        raise PermissionDenied
+    raise PermissionDenied
+
+
+def autocomplete(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            if request.GET.get('query', False):
+                query = request.GET['query']
+                search_suggest = client.search_suggest(query)
+                suggestions = search_suggest.suggestions
+                context = {'suggestions': suggestions}
+                return render(request, 'playlist/_suggestion.html', context)
+    raise PermissionDenied

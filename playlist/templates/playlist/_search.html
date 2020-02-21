@@ -1,6 +1,9 @@
 {% load static %}
 <div class="row align-items-center">
-    <input id="search" type="text" name="text" placeholder="Search" class="col m-1">
+    <input id="search" list="_suggestion" type="text" name="text" placeholder="Search" class="col m-1" autocomplete="off">
+    <datalist id="_suggestion">
+        {% include 'playlist/_suggestion.html' %}
+    </datalist>
 </div>
 {% if results %}
 <div class="row align-items-center">
@@ -32,6 +35,14 @@
                 success: function(data) {
                     search_input.val('');
                     $('#_search').html(data);
+                }
+            });
+        } else {
+            $.ajax({
+                url: '{% url 'autocomplete' %}',
+                data: {'query': search_input.get(0).value},
+                success: function(data) {
+                    $('#_suggestion').html(data);
                 }
             });
         }
