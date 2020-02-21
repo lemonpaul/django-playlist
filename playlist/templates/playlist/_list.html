@@ -41,7 +41,7 @@
         $(this).click(function () {
             $.ajax({
                 type: 'POST',
-                url: '/vote/',
+                url: '{% url 'vote' %}',
                 data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'vote': 'down', 'id': $(this).attr('name')},
                 success: function(data) {
                     $('#_list').html(data);
@@ -54,7 +54,7 @@
         $(this).click(function () {
             $.ajax({
                 type: 'POST',
-                url: '/vote/',
+                url: '{% url 'vote' %}',
                 data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'vote': 'up', 'id': $(this).attr('name')},
                 success: function(data) {
                     $('#_list').html(data);
@@ -69,7 +69,7 @@
             let current_id = $('a.url[href$=\''+$('#audio').attr('src')+'\']').attr('name');
             $.ajax({
                 type: 'POST',
-                url: '/delete/',
+                url: '{% url 'delete' %}',
                 data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
                 success: function(data) {
                     $('#_list').html(data);

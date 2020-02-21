@@ -115,7 +115,7 @@
                 if (total() > 0) {
                     $.ajax({
                         type: 'POST',
-                        url: '/update/',
+                        url: '{% url 'update' %}',
                         data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': current_id()},
                         success: function (data) {
                             $('#_list').html(data);
@@ -154,7 +154,7 @@
                 if (total() > 0 && elements.audio.attr('src')) {
                     $.ajax({
                         type: 'POST',
-                        url: '/update/',
+                        url: '{% url 'update' %}',
                         data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': current_id()},
                         success: function (data) {
                             $('#_list').html(data);
@@ -209,7 +209,7 @@
 
             setInterval(function() {
                 $.ajax({
-                    url: '/update/',
+                    url: '{% url 'update' %}',
                     success: function (data) {
                         $('#_list').html(data);
                         if (elements.audio.attr('src') && current_id() == 0)
