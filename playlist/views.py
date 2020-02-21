@@ -129,4 +129,6 @@ def autocomplete(request):
                 suggestions = search_suggest.suggestions
                 context = {'suggestions': suggestions}
                 return render(request, 'playlist/_suggestion.html', context)
+            else:
+                return render(request, 'playlist/_suggestion.html')
     raise PermissionDenied
