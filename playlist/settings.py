@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import django_heroku
-from google.oauth2 import service_account
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -134,6 +133,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media')
 
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 
-DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAADPfCyXJe44bKf1sCxrkGEtMc141kbR1OIko-EfZ2OUC-'
+DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAAHbNJc65zIq6zrpYl3n3T_h4SB_1yhd-o3N8lkhiZWH5H'
 
 django_heroku.settings(locals())
