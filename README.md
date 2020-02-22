@@ -16,11 +16,17 @@ pip3 install Django psycopg2 yandex-music
 
 ### Installing
 
-Change YANDEX_MUSIC_USER and YANDEX_MUSIC_PASSWORD in settings.py
+Generate YANDEX_MUSIC_TOKEN using python and yandex music api
 
 ```
-YANDEX_MUSIC_USER = 'user@yandex.ru'
-YANDEX_MUSIC_PASSWORD = 'password'
+from yandex_music import Client
+Client().generate_token_by_username_and_password('username@yandex.ru', password')
+```
+
+Change YANDEX_MUSIC_TOKEN in settings.py with generated one
+
+```
+YANDEX_MUSIC_TOKEN = 'auth_token'
 ```
 
 Run migrations.

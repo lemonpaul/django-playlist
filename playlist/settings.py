@@ -106,9 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-YANDEX_MUSIC_USER = 'user@yandex.ru'
-YANDEX_MUSIC_PASSWORD = 'password'
-
+YANDEX_MUSIC_TOKEN = 'AgAAAAAW4iODAAG8XgSv0PnIFUsJnxyxoxYWr1g'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

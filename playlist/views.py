@@ -10,7 +10,7 @@ from .models import Track
 
 from yandex_music.client import Client
 
-client = Client.fromCredentials(settings.YANDEX_MUSIC_USER, settings.YANDEX_MUSIC_PASSWORD)
+client = Client.from_token(settings.YANDEX_MUSIC_TOKEN)
 
 
 def index(request):
