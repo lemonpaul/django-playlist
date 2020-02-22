@@ -1,21 +1,23 @@
 from os import remove, path
-from datetime import timedelta, datetime
+from datetime import timedelta
+from django.utils import timezone
 from hashlib import sha1
+from yandex_music.client import Client
 
+from django.core.files.storage import default_storage
 from django.core.files import File
 from django.shortcuts import render
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from .models import Track
 
-from yandex_music.client import Client
 
 client = Client.from_token(settings.YANDEX_MUSIC_TOKEN)
 
 
 def index(request):
     if not request.session.get('user_id', False):
-        request.session['user_id'] = sha1(str.encode(str(datetime.now().timestamp()))).hexdigest()
+        request.session['user_id'] = sha1(str.encode(str(timezone.now().timestamp()))).hexdigest()
     context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
     return render(request, 'playlist/index.html', context)
 
@@ -29,9 +31,10 @@ def add(request):
         duration = timedelta(milliseconds=track.duration_ms)
         new_track = Track.objects.create(title=title, artists=artists, duration=duration)
         new_track.save()
-        track.download(path.join(settings.MEDIA_ROOT, 'tracks', 'track.mp3'), bitrate_in_kbps=320)
-        new_track.file.save('track.mp3', File(open(path.join(settings.MEDIA_ROOT, 'tracks', 'track.mp3'), 'rb')))
-        remove(path.join(settings.MEDIA_ROOT, 'tracks', 'track.mp3'))
+        filename = sha1(str.encode(str(timezone.now().timestamp()))).hexdigest()+'.mp3'
+        track.download(path.join(settings.MEDIA_ROOT, 'track.mp3'), bitrate_in_kbps=320)
+        new_track.file.save(filename, File(open(path.join(settings.MEDIA_ROOT, 'track.mp3'), 'rb')))
+        remove(path.join(settings.MEDIA_ROOT, 'track.mp3'))
         new_track.save()
         context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
         return render(request, 'playlist/_list.html', context)
@@ -71,6 +74,7 @@ def delete(request):
     if request.method == "POST":
         if request.is_ajax():
             track = Track.objects.get(id=request.POST['id'])
+            default_storage.delete(track.file.name)
             track.delete()
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
@@ -84,7 +88,7 @@ def update(request):
             return render(request, 'playlist/_list.html', context)
         elif request.method == 'POST':
             track = Track.objects.get(id=request.POST['id'])
-            track.add_at = datetime.now()
+            track.add_at = timezone.now()
             track.rate = 0
             track.voices_down = []
             track.voices_up = []

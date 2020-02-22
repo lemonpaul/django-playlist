@@ -15,7 +15,11 @@
     <div class="index col-1 m-1">{{ forloop.counter }}</div>
     <div class="title col m-1">{{ track.title }}</div>
     <div class="artist col m-1">{{ track.artists|join:", " }}</div>
-    {% if track.file %}<div class="col-1" hidden><a name="{{ track.id }}" class="url" href="{{ track.file.url }}">{{ track.file.name }}</a></div>{% endif %}
+    {% if track.file %}
+    <div class="col-1" hidden>
+        <a name="{{ track.id }}" class="url" href="{{ track.file.url }}">{{ track.file.name }}</a>
+    </div>
+    {% endif %}
     <div id="track_down" class="col-1 m-1">
         {% if request.session.user_id not in track.voices_down %}
         <img name="{{ track.id }}" class="down" src="{% static 'playlist/icons/down.ico' %}">
@@ -66,7 +70,7 @@
     delete_buttons.each(function () {
         $(this).click(function () {
             let delete_id = $(this).attr('name');
-            let current_id = $('a.url[href$=\''+$('#audio').attr('src')+'\']').attr('name');
+            let current_id = previous_id;
             $.ajax({
                 type: 'POST',
                 url: '{% url 'delete' %}',

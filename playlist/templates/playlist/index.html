@@ -99,11 +99,14 @@
             };
 
             let current_id = function() {
-                let href = $('#audio').attr('src');
-                return $('a.url[href$=\''+href+'\']').attr('name') ?
-                       $('a.url[href$=\''+href+'\']').attr('name') : 0;
+                return $('img.delete').attr('name') ? $('img.delete').attr('name') : 0;
             };
 
+            let previous_exists = function() {
+                return $('img.delete[name='+previous_id+']').length == 1;
+            };
+
+            let previous_id = 0;
             let current_volume = 1;
 
             elements.audio.on('timeupdate', function() {
@@ -124,6 +127,7 @@
                             elements.time.text(current_time());
                             elements.audio.get(0).play();
                             $('title').text(current_title());
+                            previous_id = current_id();
                         }
                     });
                 }
@@ -136,6 +140,7 @@
                     if (!elements.audio.attr('src')) {
                         elements.title.text(current_title());
                         elements.audio.attr('src', current_url());
+                        previous_id = current_id();
                     }
                     elements.time.text(current_time());
                     elements.audio.get(0).play();
@@ -166,6 +171,7 @@
                                 elements.audio.get(0).play();
                                 $('title').text(current_title());
                             }
+                            previous_id = current_id();
                         }
                     });
                 }
@@ -212,7 +218,7 @@
                     url: '{% url 'update' %}',
                     success: function (data) {
                         $('#_list').html(data);
-                        if (elements.audio.attr('src') && current_id() == 0)
+                        if (elements.audio.attr('src') && !previous_exists())
                         {
                             let paused = elements.audio.get(0).paused;
                             if (total() > 0) {
@@ -223,6 +229,7 @@
                                     elements.audio.get(0).play();
                                     $('title').text(current_title());
                                 }
+                                previous_id = current_id();
                             } else {
                                 elements.title.text('');
                                 elements.audio.attr('src', '');
