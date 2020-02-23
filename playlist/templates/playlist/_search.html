@@ -22,10 +22,31 @@
     <div class="col-1 m-1">{{ track.duration }}</div>
 </div>
 {% endfor %}
+<div class="row">
+    {% if page|add:0 != 0 %}
+        <button class="pagination col-1 m-1 d-inline-block btn-dark" name="0">First</button>
+    {% endif %}
+    {% for _ in ''|center:total %}
+        {% if forloop.counter0 == page|add:0 %}
+            <div class="col-1 m-1 text-center">{{ forloop.counter }}</div>
+        {% elif forloop.counter0 < page|add:3 and forloop.counter0 > page|add:-3 %}
+            <button class="pagination col-1 m-1 d-inline-block btn-dark" name="{{ forloop.counter0 }}">{{ forloop.counter }}</button>
+        {% endif %}
+    {% endfor %}
+
+    {% if page|add:0 != total|add:-1 %}
+        <button class="pagination col-1 m-1 d-inline-block btn-dark" name="{{ total|add:-1 }}">Last</button>
+    {% endif %}
+</div>
 {% endif %}
+
 <script>
     search_input = $('#search');
     add_buttons = $('img.add');
+    pagination_buttons = $('button.pagination');
+    if (typeof query === 'undefined') {
+        let query = '';
+    }
 
     search_input.keypress(function(event) {
         if (event.key === "Enter") {
@@ -33,7 +54,7 @@
                 url: '{% url 'search' %}',
                 data: {'text': search_input.val()},
                 success: function(data) {
-                    search_input.val('');
+                    query = search_input.val();
                     $('#_search').html(data);
                 }
             });
@@ -60,6 +81,18 @@
             });
             $.ajax({
                 url: '{% url 'clear' %}',
+                success: function(data) {
+                    $('#_search').html(data);
+                }
+            });
+        });
+    });
+
+    pagination_buttons.each(function () {
+        $(this).click(function () {
+            $.ajax({
+                url: '{% url 'search' %}',
+                data: {'text': query, 'page': $(this).attr('name')},
                 success: function(data) {
                     $('#_search').html(data);
                 }

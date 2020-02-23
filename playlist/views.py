@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.utils import timezone
 from hashlib import sha1
 from yandex_music.client import Client
+from math import ceil
 
 from django.core.files.storage import default_storage
 from django.core.files import File
@@ -46,7 +47,9 @@ def search(request):
     if request.is_ajax():
         if request.GET.get('text', False):
             text = request.GET['text']
-            tracks = client.search(text, type_='track').tracks
+            page_num = request.GET.get('page', 0)
+            tracks = client.search(text, type_='track', page=page_num).tracks
+            page_count = ceil(tracks.total / tracks.per_page)
             if tracks:
                 track_list = list(map(lambda t: {
                     'artists': list(map(lambda a: a.name, t.artists)),
@@ -56,9 +59,9 @@ def search(request):
                     'duration': "%d:%02d" % (int(t.duration_ms/60/1000),
                                              int(t.duration_ms/1000)-int(t.duration_ms/60/1000)*60)
                 }, tracks.results))
-                context = {'results': track_list}
+                context = {'results': track_list, 'page': page_num, 'total': page_count}
             else:
-                context = {'results': []}
+                context = {'results': [], 'page': page_num, 'total': page_count}
             return render(request, 'playlist/_search.html', context)
         else:
             return render(request, 'playlist/_search.html')
