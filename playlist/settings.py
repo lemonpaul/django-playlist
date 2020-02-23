@@ -133,6 +133,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media')
 
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 
-DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAAJeD5Shrd90E5AYyxs41SbD1Eb1ayMWUaMaBBF6li7-Y7'
+DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAAOFhhZpXpIdcqX4qOcmE9c8vHbcfDk6zdKKGs8aQUOzWQ'
 
 django_heroku.settings(locals())

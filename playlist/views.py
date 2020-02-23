@@ -32,7 +32,8 @@ def add(request):
         new_track = Track.objects.create(title=title, artists=artists, duration=duration)
         new_track.save()
         filename = sha1(str.encode(str(timezone.now().timestamp()))).hexdigest()+'.mp3'
-        track.download(path.join(settings.MEDIA_ROOT, 'track.mp3'), bitrate_in_kbps=320)
+        max_bitrate = max([info.bitrate_in_kbps for info in track.get_download_info()])
+        track.download(path.join(settings.MEDIA_ROOT, 'track.mp3'), bitrate_in_kbps=max_bitrate)
         new_track.file.save(filename, File(open(path.join(settings.MEDIA_ROOT, 'track.mp3'), 'rb')))
         remove(path.join(settings.MEDIA_ROOT, 'track.mp3'))
         new_track.save()
