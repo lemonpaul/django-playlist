@@ -133,6 +133,9 @@ MEDIA_URL = '/media/'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 
-DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAAlUVbc3ZMW5cQfaCx1_cxaCbFvFL6dJZjwHB85WS7etcb'
+DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAAnpt-4eZqiSuLZoioB5kgsywZaftnemoEfUowjXcHt-0p'
 
 django_heroku.settings(locals())
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'

@@ -7,7 +7,7 @@ class Track(models.Model):
     artists = ArrayField(models.CharField(max_length=256))
     duration = models.DurationField()
     file = models.CharField(max_length=256)
-    url = models.CharField(max_length=512)
+    url = models.CharField(max_length=512, null=True)
     add_at = models.DateTimeField(auto_now_add=True)
     rate = models.IntegerField(default=0)
     voices_up = ArrayField(models.CharField(max_length=256), default=list)

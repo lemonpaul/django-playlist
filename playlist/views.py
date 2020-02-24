@@ -11,6 +11,7 @@ from django.shortcuts import render
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from .models import Track
+from .tasks import download, purge
 
 
 client = Client.from_token(settings.YANDEX_MUSIC_TOKEN)
@@ -31,13 +32,9 @@ def add(request):
         artists = list(map(lambda t: t.name, track.artists))
         duration = timedelta(milliseconds=track.duration_ms)
         file = sha1(str.encode(str(timezone.now().timestamp()))).hexdigest()+'.mp3'
-        max_bitrate = max([info.bitrate_in_kbps for info in track.get_download_info()])
-        track.download(path.join(settings.MEDIA_ROOT, 'track.mp3'), bitrate_in_kbps=max_bitrate)
-        default_storage.save(path.join('tracks', file), open(path.join(settings.MEDIA_ROOT, 'track.mp3'), 'rb'))
-        remove(path.join(settings.MEDIA_ROOT, 'track.mp3'))
-        url = default_storage.url(path.join('tracks', file))
-        new_track = Track.objects.create(title=title, artists=artists, duration=duration, file=file, url=url)
+        new_track = Track.objects.create(title=title, artists=artists, duration=duration, file=file)
         new_track.save()
+        download.delay(new_track.id, id_value)
         context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
         return render(request, 'playlist/_list.html', context)
     raise PermissionDenied
@@ -79,7 +76,7 @@ def delete(request):
     if request.method == "POST":
         if request.is_ajax():
             track = Track.objects.get(id=request.POST['id'])
-            default_storage.delete(path.join('tracks', track.file))
+            purge.delay(track.file)
             track.delete()
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)

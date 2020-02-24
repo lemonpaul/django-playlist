@@ -39,7 +39,6 @@
     {% endif %}
 </div>
 {% endif %}
-
 <script>
     search_input = $('#search');
     add_buttons = $('img.add');
@@ -47,7 +46,6 @@
     if (typeof query === 'undefined') {
         let query = '';
     }
-
     search_input.keypress(function(event) {
         if (event.key === "Enter") {
             $.ajax({
@@ -72,17 +70,17 @@
     add_buttons.each(function () {
         $(this).click(function () {
             $.ajax({
-                url: '{% url 'clear' %}',
-                success: function(data) {
-                    $('#_search').html(data);
-                }
-            });
-            $.ajax({
                 type: 'POST',
                 url: '{% url 'add' %}',
                 data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': $(this).attr('name')},
                 success: function(data) {
                     $('#_list').html(data);
+                }
+            });
+            $.ajax({
+                url: '{% url 'clear' %}',
+                success: function(data) {
+                    $('#_search').html(data);
                 }
             });
         });
