@@ -128,11 +128,11 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media')
 
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 
-DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAAU-bRYWmz5pQKa5PzD6YiVujCemkfnJ89-ecTKLZXO7Bi'
+DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAAlUVbc3ZMW5cQfaCx1_cxaCbFvFL6dJZjwHB85WS7etcb'
 
 django_heroku.settings(locals())

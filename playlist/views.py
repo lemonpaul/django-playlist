@@ -30,13 +30,13 @@ def add(request):
         title = track.title
         artists = list(map(lambda t: t.name, track.artists))
         duration = timedelta(milliseconds=track.duration_ms)
-        new_track = Track.objects.create(title=title, artists=artists, duration=duration)
-        new_track.save()
-        filename = sha1(str.encode(str(timezone.now().timestamp()))).hexdigest()+'.mp3'
+        file = sha1(str.encode(str(timezone.now().timestamp()))).hexdigest()+'.mp3'
         max_bitrate = max([info.bitrate_in_kbps for info in track.get_download_info()])
         track.download(path.join(settings.MEDIA_ROOT, 'track.mp3'), bitrate_in_kbps=max_bitrate)
-        new_track.file.save(filename, File(open(path.join(settings.MEDIA_ROOT, 'track.mp3'), 'rb')))
+        default_storage.save(path.join('tracks', file), open(path.join(settings.MEDIA_ROOT, 'track.mp3'), 'rb'))
         remove(path.join(settings.MEDIA_ROOT, 'track.mp3'))
+        url = default_storage.url(path.join('tracks', file))
+        new_track = Track.objects.create(title=title, artists=artists, duration=duration, file=file, url=url)
         new_track.save()
         context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
         return render(request, 'playlist/_list.html', context)
@@ -79,7 +79,7 @@ def delete(request):
     if request.method == "POST":
         if request.is_ajax():
             track = Track.objects.get(id=request.POST['id'])
-            default_storage.delete(track.file.name)
+            default_storage.delete(path.join('tracks', track.file))
             track.delete()
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
