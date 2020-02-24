@@ -11,7 +11,7 @@ def download(track_id, id_value):
     t = Track.objects.get(pk=track_id)
     track = Client.from_token(settings.YANDEX_MUSIC_TOKEN).tracks(id_value)[0]
     max_bitrate = max([info.bitrate_in_kbps for info in track.get_download_info()])
-    track.download(path.join(settings.MEDIA_ROOT,'track.mp3'), bitrate_in_kbps=max_bitrate)
+    track.download(path.join(settings.MEDIA_ROOT, 'track.mp3'), bitrate_in_kbps=max_bitrate)
     default_storage.save(path.join('tracks', t.file), open(path.join(settings.MEDIA_ROOT, 'track.mp3'), 'rb'))
     remove(path.join(settings.MEDIA_ROOT, 'track.mp3'))
     t.url = default_storage.url(path.join('tracks', t.file))
