@@ -49,8 +49,8 @@ def search(request):
             text = request.GET['text']
             page_num = request.GET.get('page', 0)
             tracks = client.search(text, type_='track', page=page_num).tracks
-            page_count = ceil(tracks.total / tracks.per_page)
             if tracks:
+                page_count = ceil(tracks.total / tracks.per_page)
                 track_list = list(map(lambda t: {
                     'artists': list(map(lambda a: a.name, t.artists)),
                     'title': t.title,
@@ -61,6 +61,7 @@ def search(request):
                 }, tracks.results))
                 context = {'results': track_list, 'page': page_num, 'total': page_count}
             else:
+                page_count = 0
                 context = {'results': [], 'page': page_num, 'total': page_count}
             return render(request, 'playlist/_search.html', context)
         else:

@@ -26,7 +26,7 @@ SECRET_KEY = 'dtt4j4__3=filnjklxjc-y^@fhwmsfl8*s+ic^8h3=53k!u4ev'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '192.168.1.159']
 
 
 # Application definition
@@ -133,6 +133,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media')
 
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 
-DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAAPF6-oBlnain9t4a1hSuMHRELaJsH5NQAgJNX_2LE6GIZ'
+DROPBOX_OAUTH2_TOKEN = 'dlo8Ht5EFDAAAAAAAAAAU-bRYWmz5pQKa5PzD6YiVujCemkfnJ89-ecTKLZXO7Bi'
 
 django_heroku.settings(locals())
