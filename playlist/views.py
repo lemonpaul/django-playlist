@@ -134,8 +134,10 @@ def autocomplete(request):
         if request.method == 'GET':
             if request.GET.get('query', False):
                 query = request.GET['query']
-                search_suggest = client.search_suggest(query)
-                suggestions = search_suggest.suggestions
+                try:
+                    suggestions = client.search_suggest(query).suggestions
+                except TypeError:
+                    suggestions = []
                 context = {'suggestions': suggestions}
                 return render(request, 'playlist/_suggestion.html', context)
             else:
