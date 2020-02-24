@@ -29,6 +29,12 @@ Change YANDEX_MUSIC_TOKEN in settings.py with generated one
 YANDEX_MUSIC_TOKEN = 'auth_token'
 ```
 
+Generate DROPBOX_OAUTH2_TOKEN and change it in settings.py
+
+```
+DROPBOX_OAUTH2_TOKEN = 'dropbox_auth_token'
+```
+
 Run migrations.
 
 ```
