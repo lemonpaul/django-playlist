@@ -109,6 +109,53 @@
             let previous_id = 0;
             let current_volume = 1;
 
+            let play = function() {
+                elements.play.parent().hide();
+                elements.pause.parent().show();
+                if (!elements.audio.attr('src')) {
+                    elements.title.text(current_title());
+                    elements.audio.attr('src', current_url());
+                    previous_id = current_id();
+                }
+                elements.time.text(current_time());
+                elements.audio.get(0).play();
+                $('title').text(current_title());
+            }
+
+            let play_next = function() {
+                let paused = elements.audio.get(0).paused;
+                elements.title.text(current_title());
+                elements.audio.attr('src', current_url());
+                elements.time.text(current_time());
+                if (!paused) {
+                    elements.audio.get(0).play();
+                    $('title').text(current_title());
+                }
+                previous_id = current_id();
+            }
+
+            let rotate = function() {
+                elements.title.text(current_title());
+                elements.audio.attr('src', current_url());
+                elements.time.text(current_time());
+                elements.audio.get(0).play();
+                $('title').text(current_title());
+                previous_id = current_id();
+            }
+
+            let delay_call = function(func) {
+                if (current_url() !== "None") {
+                    func();
+                } else {
+                    let id = setInterval(function() {
+                        if (current_url() !== "None") {
+                            func();
+                            clearInterval(id);
+                        }
+                    }, 1000);
+                }
+            }
+
             elements.audio.on('timeupdate', function() {
                 elements.time.text(current_time());
                 elements.position.val(current_position());
@@ -122,12 +169,7 @@
                         data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': previous_id},
                         success: function (data) {
                             $('#_list').html(data);
-                            elements.title.text(current_title());
-                            elements.audio.attr('src', current_url());
-                            elements.time.text(current_time());
-                            elements.audio.get(0).play();
-                            $('title').text(current_title());
-                            previous_id = current_id();
+                            delay_call(rotate);
                         }
                     });
                 }
@@ -135,16 +177,7 @@
 
             elements.play.click(function() {
                 if (total() > 0) {
-                    elements.play.parent().hide();
-                    elements.pause.parent().show();
-                    if (!elements.audio.attr('src')) {
-                        elements.title.text(current_title());
-                        elements.audio.attr('src', current_url());
-                        previous_id = current_id();
-                    }
-                    elements.time.text(current_time());
-                    elements.audio.get(0).play();
-                    $('title').text(current_title());
+                    delay_call(play);
                 }
             });
 
@@ -163,15 +196,7 @@
                         data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': previous_id},
                         success: function (data) {
                             $('#_list').html(data);
-                            let paused = elements.audio.get(0).paused;
-                            elements.title.text(current_title());
-                            elements.audio.attr('src', current_url());
-                            elements.time.text(current_time());
-                            if (!paused) {
-                                elements.audio.get(0).play();
-                                $('title').text(current_title());
-                            }
-                            previous_id = current_id();
+                            delay_call(play_next);
                         }
                     });
                 }
