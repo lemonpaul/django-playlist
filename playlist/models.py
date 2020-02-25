@@ -18,3 +18,6 @@ class Track(models.Model):
         mins = int(secs/60)
         secs -= mins*60
         return "%d:%02d" % (mins, secs)
+
+    def __str__(self):
+        return "%d. %s - %s" % (self.id, ', '.join(self.artists), self.title)
