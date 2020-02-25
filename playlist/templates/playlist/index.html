@@ -143,19 +143,6 @@
                 previous_id = current_id();
             }
 
-            let delay_call = function(func) {
-                if (current_url() !== "None") {
-                    func();
-                } else {
-                    let id = setInterval(function() {
-                        if (current_url() !== "None") {
-                            func();
-                            clearInterval(id);
-                        }
-                    }, 1000);
-                }
-            }
-
             elements.audio.on('timeupdate', function() {
                 elements.time.text(current_time());
                 elements.position.val(current_position());
@@ -169,7 +156,7 @@
                         data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': previous_id},
                         success: function (data) {
                             $('#_list').html(data);
-                            delay_call(rotate);
+                            rotate();
                         }
                     });
                 }
@@ -177,7 +164,7 @@
 
             elements.play.click(function() {
                 if (total() > 0) {
-                    delay_call(play);
+                    play();
                 }
             });
 
@@ -196,7 +183,7 @@
                         data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'id': previous_id},
                         success: function (data) {
                             $('#_list').html(data);
-                            delay_call(play_next);
+                            play_next();
                         }
                     });
                 }
