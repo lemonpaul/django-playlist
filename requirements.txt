@@ -2,5 +2,3 @@ django
 gunicorn
 django-heroku
 yandex-music
-django-storages[dropbox]
-celery[redis]
