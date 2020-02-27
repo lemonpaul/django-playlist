@@ -26,6 +26,7 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('delete/', views.delete, name='delete'),
     path('update/', views.update, name='update'),
+    path('update-url/', views.update_url, name='update-url'),
     path('clear/', views.clear, name='clear'),
     path('vote/', views.vote, name='vote'),
     path('autocomplete/', views.autocomplete, name='autocomplete'),

@@ -99,6 +99,21 @@ def update(request):
     raise PermissionDenied
 
 
+def update_url(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            old_track = Track.objects.get(id=request.POST['id'])
+            track = client.tracks(old_track.identifier)[0]
+            download_info = track.get_download_info()
+            max_bitrate = max([info.bitrate_in_kbps for info in download_info])
+            url = list(filter(lambda t: t.codec == 'mp3' and t.bitrate_in_kbps == max_bitrate, download_info))[0].get_direct_link()
+            old_track.url = url
+            old_track.save()
+            context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
+            return render(request, 'playlist/_list.html', context)
+    raise PermissionDenied
+
+
 def vote(request):
     if request.is_ajax():
         if request.method == 'POST':
