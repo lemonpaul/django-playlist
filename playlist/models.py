@@ -6,6 +6,7 @@ class Track(models.Model):
     title = models.CharField(max_length=256)
     artists = ArrayField(models.CharField(max_length=256))
     duration = models.DurationField()
+    identifier = models.CharField(max_length=256)
     url = models.CharField(max_length=512)
     add_at = models.DateTimeField(auto_now_add=True)
     rate = models.IntegerField(default=0)

@@ -33,7 +33,7 @@ def add(request):
         download_info = track.get_download_info()
         max_bitrate = max([info.bitrate_in_kbps for info in download_info])
         url = list(filter(lambda t: t.codec == 'mp3' and t.bitrate_in_kbps == max_bitrate, download_info))[0].get_direct_link()
-        new_track = Track.objects.create(title=title, artists=artists, duration=duration, url=url)
+        new_track = Track.objects.create(title=title, artists=artists, duration=duration, identifier=id_value, url=url)
         new_track.save()
         context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
         return render(request, 'playlist/_list.html', context)
