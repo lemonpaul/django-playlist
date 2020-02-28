@@ -33,7 +33,6 @@
             <button class="pagination col-1 m-1 d-inline-block btn-dark" name="{{ forloop.counter0 }}">{{ forloop.counter }}</button>
         {% endif %}
     {% endfor %}
-
     {% if page|add:0 != total|add:-1 %}
         <button class="pagination col-1 m-1 d-inline-block btn-dark" name="{{ total|add:-1 }}">Last</button>
     {% endif %}
@@ -43,11 +42,12 @@
     search_input = $('#search');
     add_buttons = $('img.add');
     pagination_buttons = $('button.pagination');
-    if (typeof query === 'undefined') {
+    if (typeof query == 'undefined') {
         let query = '';
     }
+
     search_input.keypress(function(event) {
-        if (event.key === "Enter") {
+        if (event.key == "Enter") {
             $.ajax({
                 url: '{% url 'search' %}',
                 data: {'text': search_input.val()},
