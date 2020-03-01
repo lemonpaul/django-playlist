@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import django_heroku
+import json
+
+with open('/etc/django_playlist/config.json') as config_file:
+    config = json.load(config_file)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,12 +25,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'dtt4j4__3=filnjklxjc-y^@fhwmsfl8*s+ic^8h3=53k!u4ev'
+SECRET_KEY = config.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '192.168.1.159']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -106,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-YANDEX_MUSIC_TOKEN = 'AgAAAAAW4iODAAG8XgSv0PnIFUsJnxyxoxYWr1g'
+YANDEX_MUSIC_TOKEN = config.get('YANDEX_MUSIC_TOKEN')
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
