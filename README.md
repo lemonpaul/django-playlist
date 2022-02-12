@@ -26,7 +26,7 @@ Client().generate_token_by_username_and_password('username@yandex.ru', password'
 Change YANDEX_MUSIC_TOKEN in settings.py with generated one
 
 ```
-YANDEX_MUSIC_TOKEN = 'auth_token'
+YANDEX_MUSIC_TOKEN = 'AgAAAAAW4iODAAG8XitJeNV3ek-GpVoqnBbUevQ'
 ```
 
 Run migrations.

@@ -41,7 +41,7 @@ def add(request):
 
 
 def search(request):
-    if request.is_ajax():
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         if request.GET.get('text', False):
             text = request.GET['text']
             page_num = request.GET.get('page', 0)
@@ -67,14 +67,14 @@ def search(request):
 
 
 def clear(request):
-    if request.is_ajax():
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         return render(request, 'playlist/_search.html')
     raise PermissionDenied
 
 
 def delete(request):
     if request.method == "POST":
-        if request.is_ajax():
+        if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             track = Track.objects.get(id=request.POST['id'])
             track.delete()
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
@@ -83,7 +83,7 @@ def delete(request):
 
 
 def update(request):
-    if request.is_ajax():
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         if request.method == 'GET':
             context = {'track_list': Track.objects.all().order_by(*['-rate', 'add_at'])}
             return render(request, 'playlist/_list.html', context)
@@ -100,7 +100,7 @@ def update(request):
 
 
 def update_url(request):
-    if request.is_ajax():
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         if request.method == 'POST':
             old_track = Track.objects.get(id=request.POST['id'])
             track = client.tracks(old_track.identifier)[0]
@@ -115,7 +115,7 @@ def update_url(request):
 
 
 def vote(request):
-    if request.is_ajax():
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         if request.method == 'POST':
             track = Track.objects.get(id=request.POST['id'])
             if request.POST['vote'] == 'up':
@@ -141,7 +141,7 @@ def vote(request):
 
 
 def autocomplete(request):
-    if request.is_ajax():
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         if request.method == 'GET':
             if request.GET.get('query', False):
                 query = request.GET['query']

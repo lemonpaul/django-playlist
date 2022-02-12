@@ -1,4 +1,4 @@
 django
-gunicorn
-django-heroku
 yandex-music
+psycopg2
+pip
